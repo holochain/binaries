@@ -51,6 +51,9 @@
                 crossSystem = "x86_64-linux";
                 rustTargetTriple = "x86_64-unknown-linux-gnu";
               };
+              "${package}_x86_64-linux-musl" = import ./modules/holochain-musl.nix {
+                inherit localSystem inputs crate package;
+              };
               "${package}_x86_64-windows" = import ./modules/holochain-windows.nix {
                 inherit localSystem inputs crate package;
               };

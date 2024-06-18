@@ -23,7 +23,7 @@ let
     overlays = [ (import rust-overlay) ];
   };
 
-  rustToolchain = pkgs.pkgsBuildHost.rust-bin.stable.latest.default.override {
+  rustToolchain = pkgs.pkgsBuildHost.rust-bin.stable.latest.minimal.override {
     targets = [ rustTargetTriple ];
   };
 
