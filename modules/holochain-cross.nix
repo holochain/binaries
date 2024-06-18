@@ -1,20 +1,12 @@
 {
   # Flake inputs
   inputs
-
   # The system that we are compiling on
 , localSystem
-
   # The crate to build, from the Holochain workspace. Must match the path to the Cargo.toml file.
 , crate
-
   # The name of the package to build, from the selected crate.
 , package
-
-  #
-  # The remaining arguments are for configuring the cross-compile.
-  #
-
   # The target system that we are cross-compiling for
 , crossSystem
   # The target that Rust should be configured to use
@@ -23,6 +15,8 @@
 }:
 let
   inherit (inputs) nixpkgs crane rust-overlay;
+
+  common = import ./common.nix { };
 
   pkgs = import nixpkgs {
     inherit crossSystem localSystem;
@@ -52,13 +46,10 @@ let
     , stdenv
     }:
     let
-      # Crane filters out all non-cargo related files. Define include filter with files needed for build.
-      nonCargoBuildFiles = path: _type: builtins.match ".*(json|sql|wasm.gz)$" path != null;
-      includeFilesFilter = path: type:
-        (craneLib.filterCargoSources path type) || (nonCargoBuildFiles path type);
+      holochainCommon = common.holochain { inherit lib craneLib; holochain = inputs.holochain; };
 
       # Crane doesn't know which version to select from a workspace, so we tell it where to look
-      crateInfo = craneLib.crateNameFromCargoToml { cargoToml = inputs.holochain + "/crates/${crate}/Cargo.toml"; };
+      crateInfo = holochainCommon.crateInfo crate;
 
       commonArgs = {
         # Just used for building the workspace, will be replaced when building a specific crate
@@ -66,10 +57,7 @@ let
         version = "0.0.0";
 
         # Load source with a custom filter so we can include non-cargo files that get used during the build
-        src = lib.cleanSourceWith {
-          src = inputs.holochain;
-          filter = includeFilesFilter;
-        };
+        src = holochainCommon.src;
 
         # We don't want to run tests
         doCheck = false;

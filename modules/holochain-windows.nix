@@ -1,6 +1,17 @@
-{ inputs, localSystem, crate, package }:
+{
+  # Flake inputs
+  inputs
+  # The system that we are compiling on
+, localSystem
+  # The crate to build, from the Holochain workspace. Must match the path to the Cargo.toml file.
+, crate
+  # The name of the package to build, from the selected crate.
+, package
+}:
 let
   inherit (inputs) nixpkgs crane fenix;
+
+  common = import ./common.nix { };
 
   pkgs = nixpkgs.legacyPackages.${localSystem};
 
@@ -19,7 +30,9 @@ let
     (craneLib.filterCargoSources path type) || (nonCargoBuildFiles path type);
 
   # Crane doesn't know which version to select from a workspace, so we tell it where to look
-  crateInfo = craneLib.crateNameFromCargoToml { cargoToml = inputs.holochain + "/crates/${crate}/Cargo.toml"; };
+  crateInfo = holochainCommon.crateInfo crate;
+
+  holochainCommon = common.holochain { inherit craneLib; lib = pkgs.lib; holochain = inputs.holochain; };
 
   libsodium = pkgs.stdenv.mkDerivation {
     name = "libsodium";
@@ -38,10 +51,9 @@ in
 craneLib.buildPackage {
   pname = package;
   version = crateInfo.version;
-  src = pkgs.lib.cleanSourceWith {
-    src = inputs.holochain;
-    filter = includeFilesFilter;
-  };
+
+  # Load source with a custom filter so we can include non-cargo files that get used during the build
+  src = holochainCommon.src;
 
   strictDeps = true;
   doCheck = false;
