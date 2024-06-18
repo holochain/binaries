@@ -45,9 +45,7 @@ let
   # Normally you can stick this function into its own file and pass
   # its path to `callPackage`.
   crateExpression =
-    {
-      #libiconv ,
-      lib
+    { lib
     , pkg-config
     , go
     , perl
@@ -90,9 +88,6 @@ let
           go
           perl
         ];
-        #           ++ lib.optionals stdenv.buildPlatform.isDarwin [
-        #            libiconv
-        #          ];
 
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
         # and `cargo run`.
