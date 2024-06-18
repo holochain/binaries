@@ -28,6 +28,11 @@
       url = "github:holochain/holochain/bump-influxive";
       flake = false;
     };
+
+    lair-keystore = {
+      url = "github:holochain/lair";
+      flake = false;
+    };
   };
 
   outputs = inputs @ { nixpkgs, crane, flake-utils, rust-overlay, ... }:
@@ -58,11 +63,36 @@
                 rustTargetTriple = "aarch64-apple-darwin";
               };
             } else { });
+
+            defineLairKeystorePackages = {}: {
+              lair_keystore_aarch64-linux = import ./modules/lair-keystore-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "aarch64-linux";
+                rustTargetTriple = "aarch64-unknown-linux-gnu";
+              };
+              lair_keystore_x86_64-linux = import ./modules/lair-keystore-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "x86_64-linux";
+                rustTargetTriple = "x86_64-unknown-linux-gnu";
+              };
+              lair_keystore_x86_64-windows = import ./modules/lair-keystore-windows.nix {
+                inherit localSystem inputs;
+              };
+            } // (if localSystem == "aarch64-darwin" then {
+              # Only define darwin builds if we're on a darwin host because Apple don't like people cross compiling
+              # from other systems.
+              lair_keystore_aarch64-apple = import ./modules/lair-keystore-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "aarch64-darwin";
+                rustTargetTriple = "aarch64-apple-darwin";
+              };
+            } else { });
           in
           (defineHolochainPackages { crate = "holochain"; package = "holochain"; }) //
           (defineHolochainPackages { crate = "hc"; package = "holochain_cli"; }) //
           (defineHolochainPackages { crate = "hc_run_local_services"; package = "holochain_cli_run_local_services"; }) //
-          (defineHolochainPackages { crate = "holochain_terminal"; package = "hcterm"; })
+          (defineHolochainPackages { crate = "holochain_terminal"; package = "hcterm"; }) //
+          (defineLairKeystorePackages { })
         ;
       }) // {
       # Add dev helpers that are not required to be platform agnostic
