@@ -56,8 +56,6 @@ craneLib.buildPackage {
 
   SODIUM_LIB_DIR = "${libsodium}/lib";
 
-  # OPENSSL_NO_VENDOR = "1";
-
   nativeBuildInputs = with pkgs; [
     go
     perl
