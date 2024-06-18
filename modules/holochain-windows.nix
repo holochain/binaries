@@ -47,37 +47,50 @@ let
       cp -r libsodium-win64/* $out
     '';
   };
+
+  commonArgs = {
+    # Just used for building the workspace, will be replaced when building a specific crate
+    pname = "default";
+    version = "0.0.0";
+
+    # Load source with a custom filter so we can include non-cargo files that get used during the build
+    src = holochainCommon.src;
+
+    strictDeps = true;
+    doCheck = false;
+
+    CARGO_BUILD_TARGET = "x86_64-pc-windows-gnu";
+
+    # fixes issues related to libring
+    TARGET_CC = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
+
+    # Otherwise tx5-go-pion-sys picks up the host linker instead of the cross linker
+    RUSTC_LINKER = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
+
+    SODIUM_LIB_DIR = "${libsodium}/lib";
+
+    nativeBuildInputs = with pkgs; [
+      go
+      perl
+    ];
+
+    depsBuildBuild = with pkgs; [
+      pkgsCross.mingwW64.stdenv.cc
+      pkgsCross.mingwW64.windows.pthreads
+    ];
+  };
+
+  # Build *just* the Cargo dependencies (of the entire workspace),
+  # so we can reuse all of that work (e.g. via cachix) when running in CI
+  # It is *highly* recommended to use something like cargo-hakari to avoid
+  # cache misses when building individual top-level-crates
+  cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 in
-craneLib.buildPackage {
+craneLib.buildPackage (commonArgs // {
   pname = package;
   version = crateInfo.version;
 
-  # Load source with a custom filter so we can include non-cargo files that get used during the build
-  src = holochainCommon.src;
-
-  strictDeps = true;
-  doCheck = false;
-
-  CARGO_BUILD_TARGET = "x86_64-pc-windows-gnu";
-
-  # fixes issues related to libring
-  TARGET_CC = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
-
-  # Otherwise tx5-go-pion-sys picks up the host linker instead of the cross linker
-  RUSTC_LINKER = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
-
-  SODIUM_LIB_DIR = "${libsodium}/lib";
-
-  nativeBuildInputs = with pkgs; [
-    go
-    perl
-  ];
-
-  depsBuildBuild = with pkgs; [
-    pkgsCross.mingwW64.stdenv.cc
-    pkgsCross.mingwW64.windows.pthreads
-  ];
+  inherit cargoArtifacts;
 
   cargoExtraArgs = "--package ${package}";
-}
-
+})

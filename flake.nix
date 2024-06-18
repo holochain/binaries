@@ -53,6 +53,12 @@
             crate = "holochain";
             package = "holochain";
           };
+
+          holochain_cli_x86_64-windows = import ./modules/holochain-windows.nix {
+            inherit localSystem inputs;
+            crate = "hc";
+            package = "holochain_cli";
+          };
         } // (if localSystem == "aarch64-darwin" then {
           holochain_aarch64-apple = import ./modules/holochain-cross.nix {
             inherit localSystem inputs;
