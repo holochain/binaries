@@ -19,6 +19,11 @@
       };
     };
 
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     holochain = {
       url = "github:holochain/holochain/bump-influxive";
       flake = false;
@@ -42,6 +47,11 @@
             package = "holochain";
             crossSystem = "x86_64-linux";
             rustTargetTriple = "x86_64-unknown-linux-gnu";
+          };
+          holochain_x86_64-windows = import ./modules/holochain-windows.nix {
+            inherit localSystem inputs;
+            crate = "holochain";
+            package = "holochain";
           };
         } // (if localSystem == "aarch64-darwin" then {
           holochain_aarch64-apple = import ./modules/holochain-cross.nix {

@@ -1,12 +1,14 @@
 {
   # Flake inputs
   inputs
+
 , # The system that we are compiling on
   localSystem
 
   # The crate to build, from the Holochain workspace. Must match the path to the Cargo.toml file.
 , crate
 
+  # The name of the package to build, from the selected crate.
 , package
 
 , #
