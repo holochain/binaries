@@ -97,8 +97,47 @@
           (defineHolochainPackages { crate = "holochain_terminal"; package = "hcterm"; }) //
           (defineLairKeystorePackages { })
         ;
-      }) // {
-      # Add dev helpers that are not required to be platform agnostic
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-    };
+      }) //
+    (
+      let
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          overlays = [ (import rust-overlay) ];
+        };
+      in
+      {
+        # Add dev helpers that are not required to be platform agnostic
+        formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+
+        devShells.x86_64-linux.default =
+          let
+            rustToolchain = pkgs.rust-bin.stable.latest.minimal.override {
+              targets = [ "x86_64-unknown-linux-musl" ];
+            };
+          in
+          pkgs.mkShell {
+            packages = with pkgs; [
+              go
+              perl
+              musl
+              which
+              rustToolchain
+            ];
+
+            shellHook = ''
+              # export CARGO_BUILD_TARGET="x86_64-unknown-linux-musl"
+              # export RUSTFLAGS="-Clinker=mold -Ctarget-feature=+crt-static -Crelocation-model=static -Cstrip=symbols"
+              # CC=musl-gcc
+              # unset NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+
+              unset NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+              unset NIX_LDFLAGS_FOR_BUILD
+              export CARGO_BUILD_TARGET="x86_64-unknown-linux-musl"
+              export RUSTFLAGS="-Ctarget-feature=+crt-static -Crelocation-model=static -Cstrip=symbols"
+
+              export PS1='\n\[\033[1;34m\][dev:\w]\$\[\033[0m\] '
+            '';
+          };
+      }
+    );
 }
