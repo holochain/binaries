@@ -107,7 +107,7 @@ jobs:
       - name: Build Holochain
         run: nix bundle .#holonix_lair_keystore
 
-      - name: Run Holochain
+      - name: Run Lair Keystore
         run: ./lair-keystore --version
 
       - name: Build Lair Keystore
