@@ -33,6 +33,15 @@
       url = "github:holochain/lair";
       flake = false;
     };
+
+    holonix = {
+      url = "github:holochain/holonix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.crane.follows = "crane";
+      inputs.rust-overlay.follows = "rust-overlay";
+      inputs.holochain.follows = "holochain";
+      inputs.lair-keystore.follows = "lair-keystore";
+    };
   };
 
   outputs = inputs @ { nixpkgs, crane, flake-utils, rust-overlay, ... }:
@@ -92,7 +101,10 @@
           (defineHolochainPackages { crate = "hc"; package = "holochain_cli"; }) //
           (defineHolochainPackages { crate = "hc_run_local_services"; package = "holochain_cli_run_local_services"; }) //
           (defineHolochainPackages { crate = "holochain_terminal"; package = "hcterm"; }) //
-          (defineLairKeystorePackages { })
+          (defineLairKeystorePackages { }) // {
+            holonix_holochain = inputs.holonix.packages.${localSystem}.holochain;
+            holonix_lair_keystore = inputs.holonix.packages.${localSystem}.lair-keystore;
+          }
         ;
       }) // {
       # Add dev helpers that are not required to be platform agnostic

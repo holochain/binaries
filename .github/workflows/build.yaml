@@ -83,3 +83,30 @@ jobs:
 
       - name: Build for x86_64-apple-darwin
         run: nix build .#lair_keystore_aarch64-apple
+
+  bundle-x86-64-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v2
+        with:
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build Holochain
+        run: nix bundle .#holonix_lair_keystore
+
+      - name: Run Holochain
+        run: holochain --version
+
+      - name: Build Lair Keystore
+        run: nix bundle .#holonix_holochain
+
