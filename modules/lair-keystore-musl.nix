@@ -3,10 +3,6 @@
   inputs
   # The system that we are compiling on
 , localSystem
-  # The crate to build, from the Holochain workspace. Must match the path to the Cargo.toml file.
-, crate
-  # The name of the package to build, from the selected crate.
-, package
 }:
 let
   inherit (inputs) nixpkgs crane rust-overlay;
@@ -24,10 +20,7 @@ let
 
   craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
 
-  holochainCommon = common.holochain { inherit craneLib; lib = pkgs.lib; holochain = inputs.holochain; };
-
-  # Crane doesn't know which version to select from a workspace, so we tell it where to look
-  crateInfo = holochainCommon.crateInfo crate;
+  lairKeystoreCommon = common.lair-keystore { inherit craneLib; lib = pkgs.lib; lair-keystore = inputs.lair-keystore; };
 
   commonArgs = {
     # Just used for building the workspace, will be replaced when building a specific crate
@@ -35,7 +28,7 @@ let
     version = "0.0.0";
 
     # Load source with a custom filter so we can include non-cargo files that get used during the build
-    src = holochainCommon.src;
+    src = lairKeystoreCommon.src;
 
     # We don't want to run tests
     doCheck = false;
@@ -68,10 +61,10 @@ let
   cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 in
 craneLib.buildPackage (commonArgs // {
-  pname = package;
-  version = crateInfo.version;
+  pname = "lair-keystore";
+  version = lairKeystoreCommon.crateInfo.version;
 
   inherit cargoArtifacts;
 
-  cargoExtraArgs = "--package ${package}";
+  cargoExtraArgs = "--package lair_keystore";
 })

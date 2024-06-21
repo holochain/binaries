@@ -78,6 +78,9 @@
                 crossSystem = "x86_64-linux";
                 rustTargetTriple = "x86_64-unknown-linux-gnu";
               };
+              lair_keystore_x86_64-linux-musl = import ./modules/lair-keystore-musl.nix {
+                inherit localSystem inputs;
+              };
               lair_keystore_x86_64-windows = import ./modules/lair-keystore-windows.nix {
                 inherit localSystem inputs;
               };
