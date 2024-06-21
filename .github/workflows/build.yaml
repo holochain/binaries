@@ -88,7 +88,11 @@ jobs:
         run: nix build .#lair_keystore_aarch64-apple
 
   bundle-x86-64-linux:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
@@ -104,15 +108,27 @@ jobs:
         with:
           install_url: https://releases.nixos.org/nix/nix-2.20.4/install
 
-      - name: Build Holochain
-        run: nix bundle .#holonix_lair_keystore
-
-      - name: Run Lair Keystore
-        run: ./lair-keystore --version
-
       - name: Build Lair Keystore
-        run: nix bundle .#holonix_holochain
+        run: |
+          nix bundle .#holonix_lair_keystore
+          ./lair-keystore --version
 
-      - name: Run Holochain
-        run: ./holochain --version
+      - name: Build Holochain
+        run: |
+          nix bundle .#holonix_holochain
+          ./holochain --version
 
+      - name: Build hc CLI
+        run: |
+          nix bundle .#holonix_hc
+          ./hc --version
+
+      - name: Build hc_run_local_services CLI
+        run: |
+          nix bundle .#holonix_hc_run_local_services
+          ./hc_run_local_services --version
+
+      - name: Build hcterm CLI
+        run: |
+          nix bundle .#holonix_hcterm
+          ./hcterm --version
