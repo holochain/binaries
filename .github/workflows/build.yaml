@@ -90,7 +90,7 @@ jobs:
   bundle-x86-64-linux:
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ ubuntu-latest, macos-latest, macos-13 ]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
@@ -116,10 +116,10 @@ jobs:
           nix bundle .#holonix_hc
           ./hc --version
 
-      - name: Build hc_run_local_services CLI
+      - name: Build hc-run-local-services CLI
         run: |
           nix bundle .#holonix_hc_run_local_services
-          ./hc_run_local_services --version
+          ./hc-run-local-services --version
 
       - name: Build hcterm CLI
         run: |
