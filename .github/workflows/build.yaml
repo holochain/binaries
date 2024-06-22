@@ -88,11 +88,7 @@ jobs:
         run: nix build .#lair_keystore_aarch64-apple
 
   bundle-x86-64-linux:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest, macos-13 ]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 

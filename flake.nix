@@ -100,13 +100,13 @@
             } else { });
 
             extractHolochainBin = bin: pkgs.stdenv.mkDerivation {
-                                                      name = bin;
-                                                      unpackPhase = "true";
-                                                      installPhase = ''
-                                                        mkdir -p $out/bin
-                                                        cp ${inputs.holonix.packages.${localSystem}.holochain}/bin/${bin} $out/bin
-                                                      '';
-                                                   };
+              name = bin;
+              unpackPhase = "true";
+              installPhase = ''
+                mkdir -p $out/bin
+                cp ${inputs.holonix.packages.${localSystem}.holochain}/bin/${bin} $out/bin
+              '';
+            };
           in
           (defineHolochainPackages { crate = "holochain"; package = "holochain"; }) //
           (defineHolochainPackages { crate = "hc"; package = "holochain_cli"; }) //
