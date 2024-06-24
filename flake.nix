@@ -73,6 +73,11 @@
                 crossSystem = "aarch64-darwin";
                 rustTargetTriple = "aarch64-apple-darwin";
               };
+              "${package}_x86_64-apple" = import ./modules/holochain-cross.nix {
+                inherit localSystem inputs crate package;
+                crossSystem = "x86-64-darwin";
+                rustTargetTriple = "x86_64-apple-darwin";
+              };
             } else { });
 
             defineLairKeystorePackages = {}: {
@@ -96,6 +101,11 @@
                 inherit localSystem inputs;
                 crossSystem = "aarch64-darwin";
                 rustTargetTriple = "aarch64-apple-darwin";
+              };
+              lair_keystore_x86_64-apple = import ./modules/lair-keystore-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "x86-64-darwin";
+                rustTargetTriple = "x86_64-apple-darwin";
               };
             } else { });
 
