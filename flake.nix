@@ -33,6 +33,15 @@
       url = "github:holochain/lair";
       flake = false;
     };
+
+    holonix = {
+      url = "github:holochain/holonix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.crane.follows = "crane";
+      inputs.rust-overlay.follows = "rust-overlay";
+      inputs.holochain.follows = "holochain";
+      inputs.lair-keystore.follows = "lair-keystore";
+    };
   };
 
   outputs = inputs @ { nixpkgs, crane, flake-utils, rust-overlay, ... }:
@@ -40,6 +49,8 @@
       (localSystem: {
         packages =
           let
+            pkgs = nixpkgs.legacyPackages.${localSystem};
+
             defineHolochainPackages = { crate, package }: {
               "${package}_aarch64-linux" = import ./modules/holochain-cross.nix {
                 inherit localSystem inputs crate package;
@@ -87,12 +98,27 @@
                 rustTargetTriple = "aarch64-apple-darwin";
               };
             } else { });
+
+            extractHolochainBin = bin: pkgs.stdenv.mkDerivation {
+              name = bin;
+              unpackPhase = "true";
+              installPhase = ''
+                mkdir -p $out/bin
+                cp ${inputs.holonix.packages.${localSystem}.holochain}/bin/${bin} $out/bin
+              '';
+            };
           in
           (defineHolochainPackages { crate = "holochain"; package = "holochain"; }) //
           (defineHolochainPackages { crate = "hc"; package = "holochain_cli"; }) //
           (defineHolochainPackages { crate = "hc_run_local_services"; package = "holochain_cli_run_local_services"; }) //
           (defineHolochainPackages { crate = "holochain_terminal"; package = "hcterm"; }) //
-          (defineLairKeystorePackages { })
+          (defineLairKeystorePackages { }) // (if localSystem != "aarch64-linux" then {
+            holonix_holochain = extractHolochainBin "holochain";
+            holonix_hc = extractHolochainBin "hc";
+            holonix_hc_run_local_services = extractHolochainBin "hc-run-local-services";
+            holonix_hcterm = extractHolochainBin "hcterm";
+            holonix_lair_keystore = inputs.holonix.packages.${localSystem}.lair-keystore;
+          } else { })
         ;
       }) // {
       # Add dev helpers that are not required to be platform agnostic

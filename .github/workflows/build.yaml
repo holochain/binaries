@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-holochain:
@@ -83,3 +86,38 @@ jobs:
 
       - name: Build for x86_64-apple-darwin
         run: nix build .#lair_keystore_aarch64-apple
+
+  bundle-x86-64-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build Lair Keystore
+        run: |
+          nix bundle .#holonix_lair_keystore
+          ./lair-keystore --version
+
+      - name: Build Holochain
+        run: |
+          nix bundle .#holonix_holochain
+          ./holochain --version
+
+      - name: Build hc CLI
+        run: |
+          nix bundle .#holonix_hc
+          ./hc --version
+
+      - name: Build hc-run-local-services CLI
+        run: |
+          nix bundle .#holonix_hc_run_local_services
+          ./hc-run-local-services --version
+
+      - name: Build hcterm CLI
+        run: |
+          nix bundle .#holonix_hcterm
+          ./hcterm --version
