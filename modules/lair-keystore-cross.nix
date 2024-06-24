@@ -69,6 +69,11 @@ let
           perl
         ];
 
+        buildInputs = [ ] ++ (pkgs.lib.optionals pkgs.stdenv.isDarwin [
+          # additional packages needed for darwin platforms
+          pkgs.darwin.apple_sdk.frameworks.Security
+        ]);
+
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
         # and `cargo run`.
         # Environment variables are in format `CARGO_TARGET_<UPPERCASE_UNDERSCORE_RUST_TRIPLE>_LINKER`.

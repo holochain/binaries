@@ -112,7 +112,7 @@
           (defineHolochainPackages { crate = "hc"; package = "holochain_cli"; }) //
           (defineHolochainPackages { crate = "hc_run_local_services"; package = "holochain_cli_run_local_services"; }) //
           (defineHolochainPackages { crate = "holochain_terminal"; package = "hcterm"; }) //
-          (defineLairKeystorePackages { }) // (if localSystem != "aarch64-linux" then {
+          (defineLairKeystorePackages { }) // (if localSystem == "x86_64-linux" then {
             holonix_holochain = extractHolochainBin "holochain";
             holonix_hc = extractHolochainBin "hc";
             holonix_hc_run_local_services = extractHolochainBin "hc-run-local-services";
