@@ -19,7 +19,7 @@ let
     combine [
       minimal.rustc
       minimal.cargo
-      targets.x86_64-pc-windows-gnu.latest.rust-std
+      targets.x86_64-pc-windows-gnu.minimal.rust-std
     ];
 
   craneLib = (crane.mkLib pkgs).overrideToolchain toolchain;
