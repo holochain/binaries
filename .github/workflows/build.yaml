@@ -49,8 +49,21 @@ jobs:
         with:
           install_url: https://releases.nixos.org/nix/nix-2.20.4/install
 
-      - name: Build for x86_64-apple-darwin
+      - name: Build for aarch64-apple-darwin
         run: nix build .#holochain_aarch64-apple
+
+  build-holochain-legacy-apple:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build for x86_64-apple-darwin
+        run: nix build .#holochain_x86_64-apple
 
   build-lair-keystore:
     runs-on: ubuntu-latest
@@ -88,8 +101,21 @@ jobs:
         with:
           install_url: https://releases.nixos.org/nix/nix-2.20.4/install
 
-      - name: Build for x86_64-apple-darwin
+      - name: Build for aarch64-apple-darwin
         run: nix build .#lair_keystore_aarch64-apple
+
+  build-lair-keystore-legacy-apple:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build for x86_64-apple-darwin
+        run: nix build .#lair_keystore_x86_64-apple
 
   bundle-x86-64-linux:
     runs-on: ubuntu-latest
