@@ -27,7 +27,7 @@ jobs:
         run: nix build .#lair_keystore_aarch64-linux
 
       - name: Build Lair Keystore for x86_64-pc-windows-gnu
-        run: nix holochainbuild .#lair_keystore_x86_64-windows
+        run: nix build .#lair_keystore_x86_64-windows
 
       # Holochain
       - name: Build Holochain for x86_64-unknown-linux-gnu
