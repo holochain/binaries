@@ -104,7 +104,7 @@
               };
               lair_keystore_x86_64-apple = import ./modules/lair-keystore-cross.nix {
                 inherit localSystem inputs;
-                crossSystem = "x86-64-darwin";
+                crossSystem = "x86_64-darwin";
                 rustTargetTriple = "x86_64-apple-darwin";
               };
             } else { });
