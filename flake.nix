@@ -104,7 +104,7 @@
                 rustTargetTriple = "aarch64-apple-darwin";
               };
 
-            } else if localSystem == "x86_64-linux" then {
+            } else if localSystem == "x86_64-darwin" then {
               lair_keystore_x86_64-apple = import ./modules/lair-keystore-cross.nix {
                 inherit localSystem inputs;
                 crossSystem = "x86_64-darwin";

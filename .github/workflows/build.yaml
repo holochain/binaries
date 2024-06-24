@@ -81,18 +81,18 @@ jobs:
 #      - name: Build for x86_64-pc-windows-gnu
 #        run: nix build .#lair_keystore_x86_64-windows
 
-  build-lair-keystore-apple:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install nix
-        uses: cachix/install-nix-action@v26
-        with:
-          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
-
-      - name: Build for aarch64-apple-darwin
-        run: nix build .#lair_keystore_aarch64-apple
+#  build-lair-keystore-apple:
+#    runs-on: macos-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Install nix
+#        uses: cachix/install-nix-action@v26
+#        with:
+#          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+#
+#      - name: Build for aarch64-apple-darwin
+#        run: nix build .#lair_keystore_aarch64-apple
 
   build-lair-keystore-legacy-apple:
     runs-on: macos-13
