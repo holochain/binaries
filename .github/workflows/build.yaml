@@ -13,86 +13,96 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-#  build-holochain:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Maximize build space
-#        uses: AdityaGarg8/remove-unwanted-software@v2
-#        with:
-#          remove-dotnet: 'true'
-#          remove-android: 'true'
-#          remove-codeql: 'true'
-#          remove-docker-images: 'true'
-#      - name: Install nix
-#        uses: cachix/install-nix-action@v26
-#        with:
-#          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
-#
-#      - name: Build for x86_64-unknown-linux-gnu
-#        run: nix build .#holochain_x86_64-linux
-#
-#      - name: Build for aarch64-unknown-linux-gnu
-#        run: nix build .#holochain_aarch64-linux
-#
-#      - name: Build for x86_64-pc-windows-gnu
-#        run: nix build .#holochain_x86_64-windows
-#
-#  build-holochain-apple:
-#    runs-on: macos-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Install nix
-#        uses: cachix/install-nix-action@v26
-#        with:
-#          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
-#
-#      - name: Build for aarch64-apple-darwin
-#        run: nix build .#holochain_x86_64-apple
-#
-#      - name: Build for x86_64-apple-darwin
-#        run: nix build .#holochain_x86_64-apple
-#
-#  build-lair-keystore:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Maximize build space
-#        uses: AdityaGarg8/remove-unwanted-software@v2
-#        with:
-#          remove-dotnet: 'true'
-#          remove-android: 'true'
-#          remove-codeql: 'true'
-#          remove-docker-images: 'true'
-#      - name: Install nix
-#        uses: cachix/install-nix-action@v26
-#        with:
-#          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
-#
-#      - name: Build for x86_64-unknown-linux-gnu
-#        run: nix build .#lair_keystore_x86_64-linux
-#
-#      - name: Build for aarch64-unknown-linux-gnu
-#        run: nix build .#lair_keystore_aarch64-linux
-#
-#      - name: Build for x86_64-pc-windows-gnu
-#        run: nix build .#lair_keystore_x86_64-windows
+  build-holochain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-#  build-lair-keystore-apple:
-#    runs-on: macos-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Install nix
-#        uses: cachix/install-nix-action@v26
-#        with:
-#          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
-#
-#      - name: Build for aarch64-apple-darwin
-#        run: nix build .#lair_keystore_aarch64-apple
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v2
+        with:
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build for x86_64-unknown-linux-gnu
+        run: nix build .#holochain_x86_64-linux
+
+      - name: Build for aarch64-unknown-linux-gnu
+        run: nix build .#holochain_aarch64-linux
+
+      - name: Build for x86_64-pc-windows-gnu
+        run: nix build .#holochain_x86_64-windows
+
+  build-holochain-apple:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build for aarch64-apple-darwin
+        run: nix build .#holochain_x86_64-apple
+
+  build-holochain-legacy-apple:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build for x86_64-apple-darwin
+        run: nix build .#holochain_x86_64-apple
+
+  build-lair-keystore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v2
+        with:
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build for x86_64-unknown-linux-gnu
+        run: nix build .#lair_keystore_x86_64-linux
+
+      - name: Build for aarch64-unknown-linux-gnu
+        run: nix build .#lair_keystore_aarch64-linux
+
+      - name: Build for x86_64-pc-windows-gnu
+        run: nix build .#lair_keystore_x86_64-windows
+
+  build-lair-keystore-apple:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build for aarch64-apple-darwin
+        run: nix build .#lair_keystore_aarch64-apple
 
   build-lair-keystore-legacy-apple:
     runs-on: macos-13
@@ -107,37 +117,37 @@ jobs:
       - name: Build for x86_64-apple-darwin
         run: nix build .#lair_keystore_x86_64-apple
 
-#  bundle-x86-64-linux:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Install nix
-#        uses: cachix/install-nix-action@v26
-#        with:
-#          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
-#
-#      - name: Build Lair Keystore
-#        run: |
-#          nix bundle .#holonix_lair_keystore
-#          ./lair-keystore --version
-#
-#      - name: Build Holochain
-#        run: |
-#          nix bundle .#holonix_holochain
-#          ./holochain --version
-#
-#      - name: Build hc CLI
-#        run: |
-#          nix bundle .#holonix_hc
-#          ./hc --version
-#
-#      - name: Build hc-run-local-services CLI
-#        run: |
-#          nix bundle .#holonix_hc_run_local_services
-#          ./hc-run-local-services --version
-#
-#      - name: Build hcterm CLI
-#        run: |
-#          nix bundle .#holonix_hcterm
-#          ./hcterm --version
+  bundle-x86-64-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v26
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.20.4/install
+
+      - name: Build Lair Keystore
+        run: |
+          nix bundle .#holonix_lair_keystore
+          ./lair-keystore --version
+
+      - name: Build Holochain
+        run: |
+          nix bundle .#holonix_holochain
+          ./holochain --version
+
+      - name: Build hc CLI
+        run: |
+          nix bundle .#holonix_hc
+          ./hc --version
+
+      - name: Build hc-run-local-services CLI
+        run: |
+          nix bundle .#holonix_hc_run_local_services
+          ./hc-run-local-services --version
+
+      - name: Build hcterm CLI
+        run: |
+          nix bundle .#holonix_hcterm
+          ./hcterm --version
