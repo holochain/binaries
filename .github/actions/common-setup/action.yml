@@ -3,8 +3,6 @@ description: Common setup steps for jobs that use Nix
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
-
     - name: Maximize build space
       if: runner.os == 'Linux'
       uses: AdityaGarg8/remove-unwanted-software@v2

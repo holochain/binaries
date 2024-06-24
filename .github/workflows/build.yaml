@@ -16,6 +16,7 @@ jobs:
   build-from-linux:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
 
       - name: Build Lair Keystore for x86_64-unknown-linux-gnu
@@ -39,6 +40,7 @@ jobs:
   build-from-apple:
     runs-on: macos-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
 
       - name: Build Lair Keystore for aarch64-apple-darwin
@@ -50,6 +52,7 @@ jobs:
   build-from-legacy-apple:
     runs-on: macos-13
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
 
       - name: Build Lair Keystore for x86_64-apple-darwin
@@ -61,6 +64,7 @@ jobs:
   bundle-x86-64-linux:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
 
       - name: Bundle Lair Keystore
