@@ -25,12 +25,12 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/bump-influxive";
+      url = "github:holochain/holochain/holochain-0.4.0-dev.9";
       flake = false;
     };
 
     lair-keystore = {
-      url = "github:holochain/lair";
+      url = "github:holochain/lair/lair_keystore-v0.4.5";
       flake = false;
     };
 
