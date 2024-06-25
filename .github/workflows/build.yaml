@@ -15,6 +15,9 @@ concurrency:
 jobs:
   build-from-linux:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
@@ -71,6 +74,9 @@ jobs:
 
   build-from-apple:
     runs-on: macos-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
@@ -92,6 +98,9 @@ jobs:
 
   build-from-legacy-apple:
     runs-on: macos-13
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
@@ -113,6 +122,9 @@ jobs:
 
   bundle-x86-64-linux:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
