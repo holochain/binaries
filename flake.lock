@@ -114,16 +114,16 @@
     "holochain": {
       "flake": false,
       "locked": {
-        "lastModified": 1718365820,
-        "narHash": "sha256-OrCFEjEgOKj2stvZ7+pIlLwO3WD76p4h0denhawdPfs=",
+        "lastModified": 1719311591,
+        "narHash": "sha256-WosiPPqcvgihw/WoYT0GZrUU3hTTxJDFKPYGBEDhKTA=",
         "owner": "holochain",
         "repo": "holochain",
-        "rev": "9d149d228e15301b9bd9619058fee0e10ba9b637",
+        "rev": "e3816c29d70f11acb2e0b276a69e464657870108",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "bump-influxive",
+        "ref": "hc-cli-remove-dep-on-system-openssl",
         "repo": "holochain",
         "type": "github"
       }
@@ -175,6 +175,7 @@
       },
       "original": {
         "owner": "holochain",
+        "ref": "lair_keystore-v0.4.5",
         "repo": "lair",
         "type": "github"
       }

@@ -25,7 +25,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/holochain-0.4.0-dev.9";
+      url = "github:holochain/holochain/hc-cli-remove-dep-on-system-openssl";
       flake = false;
     };
 
