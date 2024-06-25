@@ -118,7 +118,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/*
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
 
 #  build-from-apple:
 #    runs-on: macos-latest
