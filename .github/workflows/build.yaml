@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      upload-to-tag:
+          description: 'Upload artifacts to a release, identified by its tag'
+          required: true
+          default: ''
 
 concurrency:
   group: ${{ github.ref_name }}
@@ -24,132 +30,203 @@ jobs:
 
       # Lair Keystore
       - name: Build Lair Keystore for x86_64-unknown-linux-gnu
-        run: nix build .#lair_keystore_x86_64-linux
-
-      - name: Build Lair Keystore for aarch64-unknown-linux-gnu
-        run: nix build .#lair_keystore_aarch64-linux
-
-      - name: Build Lair Keystore for x86_64-pc-windows-gnu
-        run: nix build .#lair_keystore_x86_64-windows
-
-      # Holochain
-      - name: Build Holochain for x86_64-unknown-linux-gnu
-        run: nix build .#holochain_x86_64-linux
-
-      - name: Build Holochain for aarch64-unknown-linux-gnu
-        run: nix build .#holochain_aarch64-linux
-
-      - name: Build Holochain for x86_64-pc-windows-gnu
-        run: nix build .#holochain_x86_64-windows
-
-      # hc CLI
-      - name: Build the `hc` CLI for x86_64-unknown-linux-gnu
-        run: nix build .#holochain_cli_x86_64-linux
-
-      - name: Build the `hc` CLI for aarch64-unknown-linux-gnu
-        run: nix build .#holochain_cli_aarch64-linux
-
-      - name: Build the `hc` CLI for x86_64-pc-windows-gnu
-        run: nix build .#holochain_cli_x86_64-windows
-
-      # hc-run-local-services CLI
-      - name: Build the holochain-cli-run-local CLI for x86_64-unknown-linux-gnu
-        run: nix build .#holochain_cli_run_local_services_x86_64-linux
-
-      - name: Build the holochain-cli-run-local CLI for aarch64-unknown-linux-gnu
-        run: nix build .#holochain_cli_run_local_services_aarch64-linux
-
-      - name: Build the holochain-cli-run-local CLI for x86_64-pc-windows-gnu
-        run: nix build .#holochain_cli_run_local_services_x86_64-windows
-
-      # hcterm CLI
-      - name: Build the hcterm CLI for x86_64-unknown-linux-gnu
-        run: nix build .#hcterm_x86_64-linux
-
-      - name: Build the hcterm CLI for aarch64-unknown-linux-gnu
-        run: nix build .#hcterm_aarch64-linux
-
-      - name: Build the hcterm CLI for x86_64-pc-windows-gnu
-        run: nix build .#hcterm_x86_64-windows
-
-  build-from-apple:
-    runs-on: macos-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
-
-      - name: Build Lair Keystore for aarch64-apple-darwin
-        run: nix build .#lair_keystore_aarch64-apple
-
-      - name: Build Holochain for aarch64-apple-darwin
-        run: nix build .#holochain_aarch64-apple
-
-      - name: Build the `hc` CLI for aarch64-apple-darwin
-        run: nix build .#holochain_cli_aarch64-apple
-
-      - name: Build the `holochain-cli-run-local` CLI for aarch64-apple-darwin
-        run: nix build .#holochain_cli_run_local_services_aarch64-apple
-
-      - name: Build the `hcterm` CLI for aarch64-apple-darwin
-        run: nix build .#hcterm_aarch64-apple
-
-  build-from-legacy-apple:
-    runs-on: macos-13
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
-
-      - name: Build Lair Keystore for x86_64-apple-darwin
-        run: nix build .#lair_keystore_x86_64-apple
-
-      - name: Build Holochain for x86_64-apple-darwin
-        run: nix build .#holochain_x86_64-apple
-
-      - name: Build the `hc` CLI for x86_64-apple-darwin
-        run: nix build .#holochain_cli_x86_64-apple
-
-      - name: Build the `holochain-cli-run-local` CLI for x86_64-apple-darwin
-        run: nix build .#holochain_cli_run_local_services_x86_64-apple
-
-      - name: Build the `hcterm` CLI for x86_64-apple-darwin
-        run: nix build .#hcterm_x86_64-apple
-
-  bundle-x86-64-linux:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
-
-      - name: Bundle Lair Keystore
         run: |
-          nix bundle .#holonix_lair_keystore
-          ./lair-keystore --version
+          nix build .#lair_keystore_x86_64-linux
+          ./result/bin/lair-keystore --version
+          cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-linux
 
-      - name: Bundle Holochain
-        run: |
-          nix bundle .#holonix_holochain
-          ./holochain --version
+#      - name: Build Lair Keystore for aarch64-unknown-linux-gnu
+#        run: |
+#          nix build .#lair_keystore_aarch64-linux
+#          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-linux
+#
+#      - name: Build Lair Keystore for x86_64-pc-windows-gnu
+#        run: |
+#          nix build .#lair_keystore_x86_64-windows
+#          cp ./result/bin/lair-keystore.exe deploy/lair-keystore-x86_64-windows.exe
+#
+#      # Holochain
+#      - name: Build Holochain for x86_64-unknown-linux-gnu
+#        run: |
+#          nix build .#holochain_x86_64-linux
+#          ./result/bin/holochain --version
+#          cp ./result/bin/holochain deploy/holochain-x86_64-linux
+#
+#      - name: Build Holochain for aarch64-unknown-linux-gnu
+#        run: |
+#          nix build .#holochain_aarch64-linux
+#          cp ./result/bin/holochain deploy/holochain-aarch64-linux
+#
+#      - name: Build Holochain for x86_64-pc-windows-gnu
+#        run: |
+#          nix build .#holochain_x86_64-windows
+#          cp ./result/bin/holochain.exe deploy/holochain-x86_64-windows.exe
+#
+#      # hc CLI
+#      - name: Build the `hc` CLI for x86_64-unknown-linux-gnu
+#        run: |
+#          nix build .#holochain_cli_x86_64-linux
+#          ./result/bin/hc --version
+#          cp ./result/bin/hc deploy/hc-x86_64-linux
+#
+#      - name: Build the `hc` CLI for aarch64-unknown-linux-gnu
+#        run: |
+#          nix build .#holochain_cli_aarch64-linux
+#          cp ./result/bin/hc deploy/hc-aarch64-linux
+#
+#      - name: Build the `hc` CLI for x86_64-pc-windows-gnu
+#        run: |
+#          nix build .#holochain_cli_x86_64-windows
+#          cp ./result/bin/hc.exe deploy/hc-x86_64-windows.exe
+#
+#      # hc-run-local-services CLI
+#      - name: Build the holochain-cli-run-local CLI for x86_64-unknown-linux-gnu
+#        run: |
+#          nix build .#holochain_cli_run_local_services_x86_64-linux
+#          ./result/bin/hc-run-local-services --version
+#          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-x86_64-linux
+#
+#      - name: Build the holochain-cli-run-local CLI for aarch64-unknown-linux-gnu
+#        run: |
+#          nix build .#holochain_cli_run_local_services_aarch64-linux
+#          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-aarch64-linux
+#
+#      - name: Build the holochain-cli-run-local CLI for x86_64-pc-windows-gnu
+#        run: |
+#          nix build .#holochain_cli_run_local_services_x86_64-windows
+#          cp ./result/bin/hc-run-local-services.exe deploy/hc-run-local-services-x86_64-windows.exe
+#
+#      # hcterm CLI
+#      - name: Build the hcterm CLI for x86_64-unknown-linux-gnu
+#        run: |
+#          nix build .#hcterm_x86_64-linux
+#          ./result/bin/hcterm --version
+#          cp ./result/bin/hcterm deploy/hcterm-x86_64-linux
+#
+#      - name: Build the hcterm CLI for aarch64-unknown-linux-gnu
+#        run: |
+#          nix build .#hcterm_aarch64-linux
+#          cp ./result/bin/hcterm deploy/hcterm-aarch64-linux
+#
+#      - name: Build the hcterm CLI for x86_64-pc-windows-gnu
+#        run: |
+#          nix build .#hcterm_x86_64-windows
+#          cp ./result/bin/hcterm.exe deploy/hcterm-x86_64-windows.exe
 
-      - name: Bundle the `hc` CLI
-        run: |
-          nix bundle .#holonix_hc
-          ./hc --version
+      - uses: ./.github/actions/upload
 
-      - name: Bundle the `hc-run-local-services` CLI
-        run: |
-          nix bundle .#holonix_hc_run_local_services
-          ./hc-run-local-services --version
-
-      - name: Bundle the `hcterm` CLI
-        run: |
-          nix bundle .#holonix_hcterm
-          ./hcterm --version
+#  build-from-apple:
+#    runs-on: macos-latest
+#    permissions:
+#      contents: read
+#      id-token: write
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: ./.github/actions/common-setup
+#
+#      - name: Build Lair Keystore for aarch64-apple-darwin
+#        run: |
+#          nix build .#lair_keystore_aarch64-apple
+#          ./result/bin/lair-keystore --version
+#          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
+#
+#      - name: Build Holochain for aarch64-apple-darwin
+#        run: |
+#          nix build .#holochain_aarch64-apple
+#          ./result/bin/holochain --version
+#          cp ./result/bin/holochain deploy/holochain-aarch64-apple
+#
+#      - name: Build the `hc` CLI for aarch64-apple-darwin
+#        run: |
+#          nix build .#holochain_cli_aarch64-apple
+#          ./result/bin/hc --version
+#          cp ./result/bin/hc deploy/hc-aarch64-apple
+#
+#      - name: Build the `holochain-cli-run-local` CLI for aarch64-apple-darwin
+#        run: |
+#          nix build .#holochain_cli_run_local_services_aarch64-apple
+#          ./result/bin/hc-run-local-services --version
+#          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-aarch64-apple
+#
+#      - name: Build the `hcterm` CLI for aarch64-apple-darwin
+#        run: |
+#          nix build .#hcterm_aarch64-apple
+#          ./result/bin/hcterm --version
+#          cp ./result/bin/hcterm deploy/hcterm-aarch64-apple
+#
+#      - uses: ./.github/actions/upload
+#
+#  build-from-legacy-apple:
+#    runs-on: macos-13
+#    permissions:
+#      contents: read
+#      id-token: write
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: ./.github/actions/common-setup
+#
+#      - name: Build Lair Keystore for x86_64-apple-darwin
+#        run: |
+#          nix build .#lair_keystore_x86_64-apple
+#          ./result/bin/lair-keystore --version
+#          cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-apple
+#
+#      - name: Build Holochain for x86_64-apple-darwin
+#        run: |
+#          nix build .#holochain_x86_64-apple
+#          ./result/bin/holochain --version
+#          cp ./result/bin/holochain deploy/holochain-x86_64-apple
+#
+#      - name: Build the `hc` CLI for x86_64-apple-darwin
+#        run: |
+#          nix build .#holochain_cli_x86_64-apple
+#          ./result/bin/hc --version
+#          cp ./result/bin/hc deploy/hc-x86_64-apple
+#
+#      - name: Build the `holochain-cli-run-local` CLI for x86_64-apple-darwin
+#        run: |
+#          nix build .#holochain_cli_run_local_services_x86_64-apple
+#          ./result/bin/hc-run-local-services --version
+#          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-x86_64-apple
+#
+#      - name: Build the `hcterm` CLI for x86_64-apple-darwin
+#        run: |
+#          nix build .#hcterm_x86_64-apple
+#          ./result/bin/hcterm --version
+#          cp ./result/bin/hcterm deploy/hcterm-x86_64-apple
+#
+#      - uses: ./.github/actions/upload
+#
+#  bundle-x86-64-linux:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      id-token: write
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: ./.github/actions/common-setup
+#
+#      - name: Bundle Lair Keystore
+#        run: |
+#          nix bundle .#holonix_lair_keystore
+#          ./lair-keystore --version
+#
+#      - name: Bundle Holochain
+#        run: |
+#          nix bundle .#holonix_holochain
+#          ./holochain --version
+#
+#      - name: Bundle the `hc` CLI
+#        run: |
+#          nix bundle .#holonix_hc
+#          ./hc --version
+#
+#      - name: Bundle the `hc-run-local-services` CLI
+#        run: |
+#          nix bundle .#holonix_hc_run_local_services
+#          ./hc-run-local-services --version
+#
+#      - name: Bundle the `hcterm` CLI
+#        run: |
+#          nix bundle .#holonix_hcterm
+#          ./hcterm --version

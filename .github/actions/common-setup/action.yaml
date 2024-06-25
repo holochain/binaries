@@ -19,3 +19,7 @@ runs:
 
     - name: Use GitHub cache
       uses: DeterminateSystems/magic-nix-cache-action@main
+
+    - name: Create deploy directory
+      shell: bash
+      run: mkdir -p deploy
