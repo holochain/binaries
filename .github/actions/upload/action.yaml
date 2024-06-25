@@ -5,6 +5,8 @@ runs:
   steps:
     - name: Upload artifacts to release
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+      env:
+        GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
       shell: bash
       run: |
         gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/*
