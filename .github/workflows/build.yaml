@@ -120,21 +120,21 @@ jobs:
         run: |
           gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
 
-#  build-from-apple:
-#    runs-on: macos-latest
-#    permissions:
-#      contents: read
-#      id-token: write
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: ./.github/actions/common-setup
-#
-#      - name: Build Lair Keystore for aarch64-apple-darwin
-#        run: |
-#          nix build .#lair_keystore_aarch64-apple
-#          ./result/bin/lair-keystore --version
-#          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
-#
+  build-from-apple:
+    runs-on: macos-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/common-setup
+
+      - name: Build Lair Keystore for aarch64-apple-darwin
+        run: |
+          nix build .#lair_keystore_aarch64-apple
+          ./result/bin/lair-keystore --version
+          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
+
 #      - name: Build Holochain for aarch64-apple-darwin
 #        run: |
 #          nix build .#holochain_aarch64-apple
@@ -158,29 +158,29 @@ jobs:
 #          nix build .#hcterm_aarch64-apple
 #          ./result/bin/hcterm --version
 #          cp ./result/bin/hcterm deploy/hcterm-aarch64-apple
-#
-#      - name: Upload artifacts to release
-#        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
-#        env:
-#          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
-#        run: |
-#          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/*
-#
-#  build-from-legacy-apple:
-#    runs-on: macos-13
-#    permissions:
-#      contents: read
-#      id-token: write
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: ./.github/actions/common-setup
-#
-#      - name: Build Lair Keystore for x86_64-apple-darwin
-#        run: |
-#          nix build .#lair_keystore_x86_64-apple
-#          ./result/bin/lair-keystore --version
-#          cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-apple
-#
+
+      - name: Upload artifacts to release
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
+
+  build-from-legacy-apple:
+    runs-on: macos-13
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/common-setup
+
+      - name: Build Lair Keystore for x86_64-apple-darwin
+        run: |
+          nix build .#lair_keystore_x86_64-apple
+          ./result/bin/lair-keystore --version
+          cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-apple
+
 #      - name: Build Holochain for x86_64-apple-darwin
 #        run: |
 #          nix build .#holochain_x86_64-apple
@@ -204,44 +204,56 @@ jobs:
 #          nix build .#hcterm_x86_64-apple
 #          ./result/bin/hcterm --version
 #          cp ./result/bin/hcterm deploy/hcterm-x86_64-apple
-#
-#      - name: Upload artifacts to release
-#        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
-#        env:
-#          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
-#        run: |
-#          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/*
-#
-#  bundle-x86-64-linux:
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: read
-#      id-token: write
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: ./.github/actions/common-setup
-#
-#      - name: Bundle Lair Keystore
-#        run: |
-#          nix bundle .#holonix_lair_keystore
-#          ./lair-keystore --version
-#
+
+      - name: Upload artifacts to release
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
+
+  bundle-x86-64-linux:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/common-setup
+
+      - name: Bundle Lair Keystore
+        run: |
+          nix bundle .#holonix_lair_keystore
+          ./lair-keystore --version
+          cp ./lair-keystore deploy/lair-keystore-x86-64-linux-bundle
+
 #      - name: Bundle Holochain
 #        run: |
 #          nix bundle .#holonix_holochain
 #          ./holochain --version
+#          cp ./holochain deploy/holochain-x86-64-linux-bundle
 #
 #      - name: Bundle the `hc` CLI
 #        run: |
 #          nix bundle .#holonix_hc
 #          ./hc --version
+#          cp ./hc deploy/hc-x86-64-linux-bundle
 #
 #      - name: Bundle the `hc-run-local-services` CLI
 #        run: |
 #          nix bundle .#holonix_hc_run_local_services
 #          ./hc-run-local-services --version
+#          cp ./hc-run-local-services deploy/hc-run-local-services-x86-64-linux-bundle
 #
 #      - name: Bundle the `hcterm` CLI
 #        run: |
 #          nix bundle .#holonix_hcterm
 #          ./hcterm --version
+#          cp ./hcterm deploy/hcterm-x86-64-linux-bundle
+#
+      - name: Upload artifacts to release
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
