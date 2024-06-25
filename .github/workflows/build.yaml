@@ -15,7 +15,7 @@ on:
           default: ''
 
 concurrency:
-  group: ${{ github.ref_name }}
+  group: ${{ github.ref_name }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
@@ -40,11 +40,11 @@ jobs:
 #          nix build .#lair_keystore_aarch64-linux
 #          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-linux
 #
-#      - name: Build Lair Keystore for x86_64-pc-windows-gnu
-#        run: |
-#          nix build .#lair_keystore_x86_64-windows
-#          cp ./result/bin/lair-keystore.exe deploy/lair-keystore-x86_64-windows.exe
-#
+      - name: Build Lair Keystore for x86_64-pc-windows-gnu
+        run: |
+          nix build .#lair_keystore_x86_64-windows
+          cp ./result/bin/lair-keystore.exe deploy/lair-keystore-x86_64-windows.exe
+
 #      # Holochain
 #      - name: Build Holochain for x86_64-unknown-linux-gnu
 #        run: |
