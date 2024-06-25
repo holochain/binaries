@@ -113,7 +113,12 @@ jobs:
 #          nix build .#hcterm_x86_64-windows
 #          cp ./result/bin/hcterm.exe deploy/hcterm-x86_64-windows.exe
 
-      - uses: ./.github/actions/upload
+      - name: Upload artifacts to release
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/*
 
 #  build-from-apple:
 #    runs-on: macos-latest
@@ -154,7 +159,12 @@ jobs:
 #          ./result/bin/hcterm --version
 #          cp ./result/bin/hcterm deploy/hcterm-aarch64-apple
 #
-#      - uses: ./.github/actions/upload
+#      - name: Upload artifacts to release
+#        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+#        env:
+#          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+#        run: |
+#          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/*
 #
 #  build-from-legacy-apple:
 #    runs-on: macos-13
@@ -195,7 +205,12 @@ jobs:
 #          ./result/bin/hcterm --version
 #          cp ./result/bin/hcterm deploy/hcterm-x86_64-apple
 #
-#      - uses: ./.github/actions/upload
+#      - name: Upload artifacts to release
+#        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+#        env:
+#          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+#        run: |
+#          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/*
 #
 #  bundle-x86-64-linux:
 #    runs-on: ubuntu-latest
