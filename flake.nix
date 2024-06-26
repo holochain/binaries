@@ -15,7 +15,6 @@
       url = "github:oxalica/rust-overlay";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
       };
     };
 
@@ -25,7 +24,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/hc-cli-remove-dep-on-system-openssl";
+      url = "github:holochain/holochain/holochain-0.4.0-dev.10";
       flake = false;
     };
 
