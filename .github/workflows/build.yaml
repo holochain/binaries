@@ -118,7 +118,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
 
   build-from-apple:
     runs-on: macos-latest
@@ -164,7 +164,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
 
   build-from-legacy-apple:
     runs-on: macos-13
@@ -210,7 +210,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
 
   bundle-x86-64-linux:
     runs-on: ubuntu-latest
@@ -256,4 +256,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
