@@ -24,7 +24,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/holochain-0.4.0-dev.13";
+      url = "github:holochain/holochain/holochain-0.4.0-dev.14";
       flake = false;
     };
 
@@ -132,6 +132,16 @@
             holonix_lair_keystore = inputs.holonix.packages.${localSystem}.lair-keystore;
           } else { })
         ;
+
+        devShells.default =
+         let
+         pkgs = nixpkgs.legacyPackages.${localSystem};
+         in
+         pkgs.mkShell {
+          packages = (with pkgs; [
+            patchelf
+          ]);
+        };
       }) // {
       # Add dev helpers that are not required to be platform agnostic
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
