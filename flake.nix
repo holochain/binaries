@@ -2,7 +2,10 @@
   description = "Utility for producing Holochain binaries";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=24.05";
+
+    # Older version of Nixpkgs to get an older glibc
+    nixpkgs-old.url = "github:NixOS/nixpkgs?ref=22.05";
 
     crane = {
       url = "github:ipetkov/crane";
@@ -134,14 +137,14 @@
         ;
 
         devShells.default =
-         let
-         pkgs = nixpkgs.legacyPackages.${localSystem};
-         in
-         pkgs.mkShell {
-          packages = (with pkgs; [
-            patchelf
-          ]);
-        };
+          let
+            pkgs = nixpkgs.legacyPackages.${localSystem};
+          in
+          pkgs.mkShell {
+            packages = (with pkgs; [
+              patchelf
+            ]);
+          };
       }) // {
       # Add dev helpers that are not required to be platform agnostic
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;

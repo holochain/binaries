@@ -19,11 +19,9 @@ let
     overlays = [ (import rust-overlay) ];
   };
 
-  rustToolchain = pkgs.pkgsBuildHost.rust-bin.stable.${common.rustVersion}.minimal.override {
+  craneLib = (crane.mkLib pkgs).overrideToolchain (pkgs: pkgs.pkgsBuildHost.rust-bin.stable.${common.rustVersion}.minimal.override {
     targets = [ rustTargetTriple ];
-  };
-
-  craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
+  });
 
   # Note: we have to use the `callPackage` approach here so that Nix
   # can "splice" the packages in such a way that dependencies are

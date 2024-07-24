@@ -182,16 +182,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1721782431,
-        "narHash": "sha256-UNDpwjYxNXQet/g3mgRLsQ9zxrbm9j2JEvP4ijF3AWs=",
+        "lastModified": 1717179513,
+        "narHash": "sha256-vboIEwIQojofItm2xGCdZCzW96U85l9nDW3ifMuAIdM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "4f02464258baaf54992debfd010a7a3662a25536",
+        "rev": "63dacb46bf939521bdc93981b4cbb7ecb58427a0",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
+        "ref": "24.05",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -208,6 +208,22 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/5daf0514482af3f97abaefc78a6606365c9108e2.tar.gz"
       }
     },
+    "nixpkgs-old": {
+      "locked": {
+        "lastModified": 1653936696,
+        "narHash": "sha256-M6bJShji9AIDZ7Kh7CPwPBPb/T7RiVev2PAcOi4fxDQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "ce6aa13369b667ac2542593170993504932eb836",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "22.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "crane": "crane",
@@ -217,6 +233,7 @@
         "holonix": "holonix",
         "lair-keystore": "lair-keystore",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-old": "nixpkgs-old",
         "rust-overlay": "rust-overlay"
       }
     },
