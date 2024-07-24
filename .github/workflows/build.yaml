@@ -33,6 +33,7 @@ jobs:
         run: |
           nix build .#lair_keystore_x86_64-linux
           nix develop --command ./scripts/export-binary-x86_64-linux.sh lair-keystore ./deploy
+          ldd ./deploy/lair-keystore-x86_64-linux
           ./deploy/lair-keystore-x86_64-linux --version
 
 #      - name: Build Lair Keystore for aarch64-unknown-linux-gnu
