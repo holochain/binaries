@@ -27,6 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/common-setup
+        with:
+          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       # Lair Keystore
       - name: Build Lair Keystore for x86_64-unknown-linux-gnu
@@ -129,6 +131,8 @@ jobs:
 #    steps:
 #      - uses: actions/checkout@v4
 #      - uses: ./.github/actions/common-setup
+#        with:
+#          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 #
 #      - name: Build Lair Keystore for aarch64-apple-darwin
 #        run: |
@@ -175,6 +179,8 @@ jobs:
 #    steps:
 #      - uses: actions/checkout@v4
 #      - uses: ./.github/actions/common-setup
+#        with:
+#          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 #
 #      - name: Build Lair Keystore for x86_64-apple-darwin
 #        run: |
@@ -221,6 +227,8 @@ jobs:
 #    steps:
 #      - uses: actions/checkout@v4
 #      - uses: ./.github/actions/common-setup
+#        with:
+#          cachix-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 #
 #      - name: Bundle Lair Keystore
 #        run: |

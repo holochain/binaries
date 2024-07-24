@@ -1,5 +1,9 @@
 name: Common setup
 description: Common setup steps for jobs that use Nix
+inputs:
+  cachix_token:
+    description: 'The Cachix token to use for caching'
+    required: true
 runs:
   using: composite
   steps:
@@ -20,7 +24,7 @@ runs:
     - uses: cachix/cachix-action@v15
       with:
         name: holochain-binaries
-        authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+        authToken: ${{ inputs.cachix_token }}
         extraPullNames: holochain-ci
 
     - name: Create deploy directory
