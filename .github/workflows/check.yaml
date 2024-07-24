@@ -1,0 +1,24 @@
+name: Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      check-tag:
+        description: 'Download artifacts for a specific tag and check they run'
+        required: true
+
+concurrency:
+  group: ${{ github.ref_name }}-${{ inputs.check-tag }}
+  cancel-in-progress: true
+
+jobs:
+  check-ubuntu-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Lair Keystore
+      - name: Check Lair Keystore for x86_64-unknown-linux-gnu
+        run: |
+          gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux'
+          ./lair-keystore-x86_64-linux --version
