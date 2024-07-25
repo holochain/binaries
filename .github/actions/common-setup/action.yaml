@@ -1,7 +1,7 @@
 name: Common setup
 description: Common setup steps for jobs that use Nix
 inputs:
-  cachix_token:
+  cachix-token:
     description: 'The Cachix token to use for caching'
     required: true
 runs:
