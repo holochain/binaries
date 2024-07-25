@@ -71,7 +71,7 @@ let
         # overridden above.
         nativeBuildInputs = [
           pkg-config
-          stdenv.cc
+          ccWithPatchedLibc.cc
           perl
         ];
 
