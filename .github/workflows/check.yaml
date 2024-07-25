@@ -100,6 +100,9 @@ jobs:
         shell: pwsh
         run: |
           ./scripts/check-bin.ps1 ${{ inputs.check-tag }} holochain
+    outputs:
+      lair-keystore: ${{ steps.lair-keystore.outputs.lair-keystore-result }}
+      holochain: ${{ steps.holochain.outputs.holochain-result }}
 
   collect-results:
     runs-on: ubuntu-latest
