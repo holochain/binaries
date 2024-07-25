@@ -12,4 +12,5 @@ set +e
 "./$name-$platform" --version
 result=$?
 set -e
-echo "result=[$result]" >> "$GITHUB_OUTPUT"
+echo "Exporting result ot $GITHUB_OUTPUT"
+echo "$name-result=[$result]" >> "$GITHUB_OUTPUT"

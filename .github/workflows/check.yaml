@@ -27,8 +27,8 @@ jobs:
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain x86_64-linux
     outputs:
-      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
-      holochain: ${{ steps.holochain.outputs.result }}
+      lair-keystore: ${{ steps.lair-keystore.outputs.lair-keystore-result }}
+      holochain: ${{ steps.holochain.outputs.holochain-result }}
 
   check-ubuntu-24-04:
     runs-on: ubuntu-24.04
@@ -45,8 +45,8 @@ jobs:
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain x86_64-linux
     outputs:
-      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
-      holochain: ${{ steps.holochain.outputs.result }}
+      lair-keystore: ${{ steps.lair-keystore.outputs.lair-keystore-result }}
+      holochain: ${{ steps.holochain.outputs.holochain-result }}
 
   check-macos-latest:
     runs-on: macos-latest
@@ -63,8 +63,8 @@ jobs:
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain aarch64-apple
     outputs:
-      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
-      holochain: ${{ steps.holochain.outputs.result }}
+      lair-keystore: ${{ steps.lair-keystore.outputs.lair-keystore-result }}
+      holochain: ${{ steps.holochain.outputs.holochain-result }}
 
   check-macos-13:
     runs-on: macos-13
@@ -81,8 +81,8 @@ jobs:
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain x86_64-apple
     outputs:
-      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
-      holochain: ${{ steps.holochain.outputs.result }}
+      lair-keystore: ${{ steps.lair-keystore.outputs.lair-keystore-result }}
+      holochain: ${{ steps.holochain.outputs.holochain-result }}
 
   collect-results:
     runs-on: ubuntu-latest
