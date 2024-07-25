@@ -1,7 +1,7 @@
 name: Common setup
 description: Common setup steps for jobs that use Nix
 inputs:
-  cachix-token:
+  cachix_token:
     description: 'The Cachix token to use for caching'
     required: true
   maximise-build-space:
