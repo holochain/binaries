@@ -25,8 +25,6 @@ jobs:
         run: |
           set -x
           gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
-          ls -al
-          head lair-keystore-x86_64-linux
           chmod +x lair-keystore-x86_64-linux
           set +e
           ./lair-keystore-x86_64-linux --version
@@ -43,13 +41,13 @@ jobs:
     steps:
       - name: Check Lair Keystore
         run: |
+          set -x
           gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
-          ls -al
           chmod +x lair-keystore-x86_64-linux
-          set +x
+          set +e
           ./lair-keystore-x86_64-linux --version
           result=$?
-          set -x
+          set -e
           echo "ubuntu-latest:lair-keystore-x86_64-linux=$result" >> "$GITHUB_OUTPUT"
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
