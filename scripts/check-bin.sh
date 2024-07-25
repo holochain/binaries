@@ -12,4 +12,4 @@ set +e
 "./$name-$platform" --version
 result=$?
 set -e
-echo "result=$result" >> "$GITHUB_OUTPUT"
+echo "result=[$result]" >> "$GITHUB_OUTPUT"
