@@ -21,11 +21,11 @@ jobs:
       - name: Check Lair Keystore
         id: lair-keystore
         run: |
-          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
       - name: Check Holochain
         id: holochain
         run: |
-          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain x86_64-linux
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
       holochain: ${{ steps.holochain.outputs.result }}
@@ -39,11 +39,47 @@ jobs:
       - name: Check Lair Keystore
         id: lair-keystore
         run: |
-          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
       - name: Check Holochain
         id: holochain
         run: |
-          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain x86_64-linux
+    outputs:
+      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
+      holochain: ${{ steps.holochain.outputs.result }}
+
+  check-macos-latest:
+    runs-on: macos-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Lair Keystore
+        id: lair-keystore
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} lair-keystore aarch64-apple
+      - name: Check Holochain
+        id: holochain
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain aarch64-apple
+    outputs:
+      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
+      holochain: ${{ steps.holochain.outputs.result }}
+
+  check-macos-13:
+    runs-on: macos-13
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Lair Keystore
+        id: lair-keystore
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} lair-keystore x86_64-apple
+      - name: Check Holochain
+        id: holochain
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain x86_64-apple
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
       holochain: ${{ steps.holochain.outputs.result }}
@@ -54,8 +90,14 @@ jobs:
     steps:
       - name: Collect results
         run: |
-          echo "Values of `0` are good, otherwise something went wrong"
-          echo "On ubuntu-latest : lair-keystore-x86_64-linux : ${{ needs.check-ubuntu-latest.outputs.lair-keystore }}"
-          echo "On ubuntu-latest : holochain-x86_64-linux     : ${{ needs.check-ubuntu-latest.outputs.holochain }}"
-          echo "On ubuntu-24.04  : lair-keystore-x86_64-linux : ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
-          echo "On ubuntu-24.04  : holochain-x86_64-linux     : ${{ needs.check-ubuntu-24-04.outputs.holochain }}"
+          echo
+          echo "Values of 0 are good, otherwise something went wrong"
+          echo
+          echo "On ubuntu-latest : lair-keystore-x86_64-linux  : ${{ needs.check-ubuntu-latest.outputs.lair-keystore }}"
+          echo "On ubuntu-latest : holochain-x86_64-linux      : ${{ needs.check-ubuntu-latest.outputs.holochain }}"
+          echo "On ubuntu-24.04  : lair-keystore-x86_64-linux  : ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
+          echo "On ubuntu-24.04  : holochain-x86_64-linux      : ${{ needs.check-ubuntu-24-04.outputs.holochain }}"
+          echo "On macos-latest  : lair-keystore-aarch64-apple : ${{ needs.check-macos-latest.outputs.lair-keystore }}"
+          echo "On macos-latest  : holochain-aarch64-apple     : ${{ needs.check-macos-latest.outputs.holochain }}"
+          echo "On macos-13      : lair-keystore-x86_64-apple  : ${{ needs.check-macos-13.outputs.lair-keystore }}"
+          echo "On macos-13      : holochain-x86_64-apple      : ${{ needs.check-macos-13.outputs.holochain }}"
