@@ -23,11 +23,11 @@ jobs:
       - name: Check Lair Keystore
         id: lair-keystore
         run: |
-          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
+          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
       - name: Check Holochain
         id: holochain
         run: |
-          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
+          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
       holochain: ${{ steps.holochain.outputs.result }}
@@ -40,11 +40,11 @@ jobs:
       - name: Check Lair Keystore
         id: lair-keystore
         run: |
-          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
+          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
       - name: Check Holochain
         id: holochain
         run: |
-          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
+          ./scripts/check-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
       holochain: ${{ steps.holochain.outputs.result }}
