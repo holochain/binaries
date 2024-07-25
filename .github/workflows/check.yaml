@@ -48,6 +48,7 @@ jobs:
           ./lair-keystore-x86_64-linux --version
           result=$?
           set -e
+          echo ${{ github.runs-on }}
           echo "ubuntu-latest:lair-keystore-x86_64-linux=$result" >> "$GITHUB_OUTPUT"
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
