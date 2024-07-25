@@ -3,7 +3,7 @@ param(
     [String]$name
     )
 
-Start-Process gh -ArgumentList "release download $tag --pattern $name-x86_64-windows.exe --repo holochain/holochain"
+Start-Process gh -ArgumentList "release download $tag --pattern $name-x86_64-windows.exe --repo holochain/holochain" -Wait
 
 $proc = Start-Process "$name-x86_64-windows.exe" -ArgumentList "--version" -PassThru -Wait
 $exit_code = $proc.ExitCode
