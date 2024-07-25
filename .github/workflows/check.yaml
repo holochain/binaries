@@ -84,20 +84,39 @@ jobs:
       lair-keystore: ${{ steps.lair-keystore.outputs.lair-keystore-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
 
+  check-windows:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Lair Keystore
+        id: lair-keystore
+        shell: pwsh
+        run: |
+          ./scripts/check-bin.ps1 ${{ inputs.check-tag }} lair-keystore
+      - name: Check Holochain
+        id: holochain
+        shell: pwsh
+        run: |
+          ./scripts/check-bin.ps1 ${{ inputs.check-tag }} holochain
+
   collect-results:
     runs-on: ubuntu-latest
-    needs: [check-ubuntu-latest, check-ubuntu-24-04, check-macos-latest, check-macos-13]
+    needs: [check-ubuntu-latest, check-ubuntu-24-04, check-macos-latest, check-macos-13, check-windows]
     steps:
       - name: Collect results
         run: |
           echo
           echo "Values of 0 are good, otherwise something went wrong"
           echo
-          echo "On ubuntu-latest : lair-keystore-x86_64-linux  : ${{ needs.check-ubuntu-latest.outputs.lair-keystore }}"
-          echo "On ubuntu-latest : holochain-x86_64-linux      : ${{ needs.check-ubuntu-latest.outputs.holochain }}"
-          echo "On ubuntu-24.04  : lair-keystore-x86_64-linux  : ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
-          echo "On ubuntu-24.04  : holochain-x86_64-linux      : ${{ needs.check-ubuntu-24-04.outputs.holochain }}"
-          echo "On macos-latest  : lair-keystore-aarch64-apple : ${{ needs.check-macos-latest.outputs.lair-keystore }}"
-          echo "On macos-latest  : holochain-aarch64-apple     : ${{ needs.check-macos-latest.outputs.holochain }}"
-          echo "On macos-13      : lair-keystore-x86_64-apple  : ${{ needs.check-macos-13.outputs.lair-keystore }}"
-          echo "On macos-13      : holochain-x86_64-apple      : ${{ needs.check-macos-13.outputs.holochain }}"
+          echo "On ubuntu-latest : lair-keystore-x86_64-linux   : ${{ needs.check-ubuntu-latest.outputs.lair-keystore }}"
+          echo "On ubuntu-latest : holochain-x86_64-linux       : ${{ needs.check-ubuntu-latest.outputs.holochain }}"
+          echo "On ubuntu-24.04  : lair-keystore-x86_64-linux   : ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
+          echo "On ubuntu-24.04  : holochain-x86_64-linux       : ${{ needs.check-ubuntu-24-04.outputs.holochain }}"
+          echo "On macos-latest  : lair-keystore-aarch64-apple  : ${{ needs.check-macos-latest.outputs.lair-keystore }}"
+          echo "On macos-latest  : holochain-aarch64-apple      : ${{ needs.check-macos-latest.outputs.holochain }}"
+          echo "On macos-13      : lair-keystore-x86_64-apple   : ${{ needs.check-macos-13.outputs.lair-keystore }}"
+          echo "On macos-13      : holochain-x86_64-apple       : ${{ needs.check-macos-13.outputs.holochain }}"
+          echo "On windows       : lair-keystore-x86_64-windows : ${{ needs.check-windows.outputs.lair-keystore }}"
+          echo "On windows       : holochain-x86_64-windows     : ${{ needs.check-windows.outputs.holochain }}"
