@@ -23,7 +23,7 @@ let
     overlays = [ (import rust-overlay) ];
   };
 
-  craneLib = (crane.mkLib pkgs).overrideToolchain (pkgs: pkgs.pkgsBuildHost.rust-bin.stable.${common.rustVersion}.minimal.override {
+  craneLib = (crane.mkLib pkgs).overrideToolchain (pkgs: pkgs.rust-bin.stable.${common.rustVersion}.minimal.override {
     targets = [ rustTargetTriple ];
   });
 
@@ -81,7 +81,6 @@ let
         # They are also be set in `.cargo/config.toml` instead.
         # See: https://doc.rust-lang.org/cargo/reference/config.html#target
         CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
-        CARGO_TARGET_x86_64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
         CARGO_TARGET_AARCH64_UNKNOWN_APPLE_LINKER = "${stdenv.cc.targetPrefix}cc";
 
         # Tell cargo which target we want to build (so it doesn't default to the build system).

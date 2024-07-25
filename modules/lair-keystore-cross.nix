@@ -16,12 +16,10 @@ let
 
   pkgs = import nixpkgs {
     inherit crossSystem localSystem;
-    overlays = [
-      (import rust-overlay)
-    ];
+    overlays = [ (import rust-overlay) ];
   };
 
-  craneLib = (crane.mkLib pkgs).overrideToolchain (pkgs: pkgs.pkgsBuildHost.rust-bin.stable.${common.rustVersion}.minimal.override {
+  craneLib = (crane.mkLib pkgs).overrideToolchain (pkgs: pkgs.rust-bin.stable.${common.rustVersion}.minimal.override {
     targets = [ rustTargetTriple ];
   });
 
@@ -80,7 +78,6 @@ let
         # They are also be set in `.cargo/config.toml` instead.
         # See: https://doc.rust-lang.org/cargo/reference/config.html#target
         CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
-        CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
         CARGO_TARGET_AARCH64_UNKNOWN_APPLE_LINKER = "${stdenv.cc.targetPrefix}cc";
 
         # Tell cargo which target we want to build (so it doesn't default to the build system).
@@ -111,6 +108,4 @@ let
     });
 in
 # Dispatch the crate expression to run the cross compile
-pkgs.callPackage
-  crateExpression
-{ }
+pkgs.callPackage crateExpression { }
