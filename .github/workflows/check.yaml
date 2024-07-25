@@ -86,7 +86,7 @@ jobs:
 
   collect-results:
     runs-on: ubuntu-latest
-    needs: [check-ubuntu-latest, check-ubuntu-24-04]
+    needs: [check-ubuntu-latest, check-ubuntu-24-04, check-macos-latest, check-macos-13]
     steps:
       - name: Collect results
         run: |
