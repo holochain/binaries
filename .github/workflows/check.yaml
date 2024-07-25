@@ -23,16 +23,14 @@ jobs:
       - name: Check Lair Keystore
         id: lair-keystore
         run: |
-          set -x
-          gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
-          chmod +x lair-keystore-x86_64-linux
-          set +e
-          ./lair-keystore-x86_64-linux --version
-          result=$?
-          set -e
-          echo "result=$result" >> "$GITHUB_OUTPUT"
+          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
+      - name: Check Holochain
+        id: holochain
+        run: |
+          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
+      holochain: ${{ steps.holochain.outputs.result }}
 
   check-ubuntu-24-04:
     runs-on: ubuntu-24.04
@@ -40,18 +38,16 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Check Lair Keystore
+        id: lair-keystore
         run: |
-          set -x
-          gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
-          chmod +x lair-keystore-x86_64-linux
-          set +e
-          ./lair-keystore-x86_64-linux --version
-          result=$?
-          set -e
-          echo ${{ github.runs-on }}
-          echo "result=$result" >> "$GITHUB_OUTPUT"
+          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} lair-keystore x86_64-linux
+      - name: Check Holochain
+        id: holochain
+        run: |
+          ./scripts/cehck-bin-linux.sh ${{ inputs.check-tag }} holochain x86_64-linux
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
+      holochain: ${{ steps.holochain.outputs.result }}
 
   collect-results:
     runs-on: ubuntu-latest
@@ -60,5 +56,7 @@ jobs:
       - name: Collect results
         run: |
           echo "Values of `0` are good, otherwise something went wrong"
-          echo "On ubuntu-latest : lair-keystore-x86_64-linux: ${{ needs.check-ubuntu-latest.outputs.lair-keystore }}"
-          echo "On ubuntu-24.04  : lair-keystore-x86_64-linux: ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
+          echo "On ubuntu-latest : lair-keystore-x86_64-linux : ${{ needs.check-ubuntu-latest.outputs.lair-keystore }}"
+          echo "On ubuntu-latest : holochain-x86_64-linux     : ${{ needs.check-ubuntu-latest.outputs.holochain }}"
+          echo "On ubuntu-24.04  : lair-keystore-x86_64-linux : ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
+          echo "On ubuntu-24.04  : holochain-x86_64-linux     : ${{ needs.check-ubuntu-24-04.outputs.holochain }}"
