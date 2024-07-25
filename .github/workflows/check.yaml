@@ -24,6 +24,7 @@ jobs:
         id: lair-keystore
         run: |
           gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
+          chmod +x lair-keystore-x86_64-linux
           set +x
           ./lair-keystore-x86_64-linux --version
           result=$?
@@ -40,6 +41,7 @@ jobs:
       - name: Check Lair Keystore
         run: |
           gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
+          chmod +x lair-keystore-x86_64-linux
           set +x
           ./lair-keystore-x86_64-linux --version
           result=$?
