@@ -19,9 +19,16 @@ jobs:
 
       # Lair Keystore
       - name: Check Lair Keystore
+        id: lair-keystore
         run: |
           gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
+          set +x
           ./lair-keystore-x86_64-linux --version
+          result=$?
+          set -x
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+    outputs:
+      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
 
   check-ubuntu-24-04:
     runs-on: ubuntu-24.04
@@ -29,4 +36,20 @@ jobs:
       - name: Check Lair Keystore
         run: |
           gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
+          set +x
           ./lair-keystore-x86_64-linux --version
+          result=$?
+          set -x
+          echo "ubuntu-latest:lair-keystore-x86_64-linux=$result" >> "$GITHUB_OUTPUT"
+    outputs:
+      lair-keystore: ${{ steps.lair-keystore.outputs.result }}
+
+  collect-results:
+    runs-on: ubuntu-latest
+    needs: [check-ubuntu-latest, check-ubuntu-24-04]
+    steps:
+      - name: Collect results
+        run: |
+          echo "ubuntu-latest:lair-keystore-x86_64-linux=${{ needs.check-ubuntu-latest.outputs.lair-keystore }}" >> "$GITHUB_OUTPUT"
+          echo "ubuntu-24.04:lair-keystore-x86_64-linux=${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}" >> "$GITHUB_OUTPUT"
+    
