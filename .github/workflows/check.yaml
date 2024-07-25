@@ -23,13 +23,15 @@ jobs:
       - name: Check Lair Keystore
         id: lair-keystore
         run: |
+          set -x
           gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
           ls -al
+          head lair-keystore-x86_64-linux
           chmod +x lair-keystore-x86_64-linux
-          set +x
+          set +e
           ./lair-keystore-x86_64-linux --version
           result=$?
-          set -x
+          set -e
           echo "result=$result" >> "$GITHUB_OUTPUT"
     outputs:
       lair-keystore: ${{ steps.lair-keystore.outputs.result }}
