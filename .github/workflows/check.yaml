@@ -20,5 +20,5 @@ jobs:
       # Lair Keystore
       - name: Check Lair Keystore for x86_64-unknown-linux-gnu
         run: |
-          gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux'
+          gh release download ${{ inputs.check-tag }} --pattern 'lair-keystore-x86_64-linux' --repo holochain/holochain
           ./lair-keystore-x86_64-linux --version

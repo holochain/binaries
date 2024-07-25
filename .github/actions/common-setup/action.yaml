@@ -4,11 +4,15 @@ inputs:
   cachix-token:
     description: 'The Cachix token to use for caching'
     required: true
+  maximise-build-space:
+    description: 'Whether to maximise build space'
+    required: false
+    default: 'true'
 runs:
   using: composite
   steps:
     - name: Maximize build space
-      if: runner.os == 'Linux'
+      if: runner.os == 'Linux' && inputs.maximise-build-space == 'true'
       uses: AdityaGarg8/remove-unwanted-software@v2
       with:
         remove-dotnet: 'true'
