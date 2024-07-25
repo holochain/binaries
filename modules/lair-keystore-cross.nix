@@ -10,13 +10,15 @@
 , ...
 }:
 let
-  inherit (inputs) nixpkgs nixpkgs-old crane rust-overlay;
+  inherit (inputs) nixpkgs crane rust-overlay;
 
   common = import ./common.nix { };
 
   pkgs = import nixpkgs {
     inherit crossSystem localSystem;
-    overlays = [ (import rust-overlay) ];
+    overlays = [
+      (import rust-overlay)
+    ];
   };
 
   craneLib = (crane.mkLib pkgs).overrideToolchain (pkgs: pkgs.pkgsBuildHost.rust-bin.stable.${common.rustVersion}.minimal.override {
@@ -42,14 +44,6 @@ let
     let
       lairKeystoreCommon = common.lair-keystore { inherit lib craneLib; lair-keystore = inputs.lair-keystore; };
 
-      ccWithPatchedLibc = pkgs.wrapCCWith {
-        cc = stdenv.cc;
-        libc = nixpkgs-old.legacyPackages.${crossSystem}.glibc;
-        bintools = pkgs.binutils.override {
-          libc = nixpkgs-old.legacyPackages.${crossSystem}.glibc;
-        };
-      };
-
       commonArgs = {
         # Just used for building the workspace, will be replaced when building a specific crate
         pname = "default";
@@ -71,7 +65,7 @@ let
         # overridden above.
         nativeBuildInputs = [
           pkg-config
-          ccWithPatchedLibc.cc
+          stdenv.cc
           perl
         ];
 
@@ -85,9 +79,9 @@ let
         # Environment variables are in format `CARGO_TARGET_<UPPERCASE_UNDERSCORE_RUST_TRIPLE>_LINKER`.
         # They are also be set in `.cargo/config.toml` instead.
         # See: https://doc.rust-lang.org/cargo/reference/config.html#target
-        CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${ccWithPatchedLibc.cc.targetPrefix}cc";
-        CARGO_TARGET_x86_64_UNKNOWN_LINUX_GNU_LINKER = "${ccWithPatchedLibc.cc.targetPrefix}cc";
-        CARGO_TARGET_AARCH64_UNKNOWN_APPLE_LINKER = "${ccWithPatchedLibc.cc.targetPrefix}cc";
+        CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
+        CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
+        CARGO_TARGET_AARCH64_UNKNOWN_APPLE_LINKER = "${stdenv.cc.targetPrefix}cc";
 
         # Tell cargo which target we want to build (so it doesn't default to the build system).
         cargoExtraArgs = "--target ${rustTargetTriple}";
@@ -97,8 +91,8 @@ let
         # should automatically pick up on our target-specific linker above, but this may be
         # necessary if the build script needs to compile and run some extra code on the build
         # system.
-        HOST_CC = "${ccWithPatchedLibc.cc.nativePrefix}cc";
-        TARGET_CC = "${ccWithPatchedLibc.cc.targetPrefix}cc";
+        HOST_CC = "${stdenv.cc.nativePrefix}cc";
+        TARGET_CC = "${stdenv.cc.targetPrefix}cc";
       };
 
       # Build *just* the Cargo dependencies (of the entire workspace),
@@ -117,4 +111,6 @@ let
     });
 in
 # Dispatch the crate expression to run the cross compile
-pkgs.callPackage crateExpression { }
+pkgs.callPackage
+  crateExpression
+{ }

@@ -4,9 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=24.05";
 
-    # Older version of Nixpkgs to get an older glibc
-    nixpkgs-old.url = "github:NixOS/nixpkgs?ref=22.05";
-
     crane = {
       url = "github:ipetkov/crane";
       inputs.nixpkgs.follows = "nixpkgs";
