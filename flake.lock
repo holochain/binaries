@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1722960479,
-        "narHash": "sha256-NhCkJJQhD5GUib8zN9JrmYGMwt4lCRp6ZVNzIiYCl0Y=",
+        "lastModified": 1724377159,
+        "narHash": "sha256-ixjje1JO8ucKT41hs6n2NCde1Vc0+Zc2p2gUbJpCsMw=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "4c6c77920b8d44cd6660c1621dea6b3fc4b4c4f4",
+        "rev": "3e47b7a86c19142bd3675da49d6acef488b4dac1",
         "type": "github"
       },
       "original": {
@@ -28,11 +28,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1723703304,
-        "narHash": "sha256-7ehq0nfRHpU3oNAkRpklaDxQZUpuaUig2sR2LI+IL/U=",
+        "lastModified": 1724394478,
+        "narHash": "sha256-JSiv2uwI4UJo/4pxt4255BfzWCiEberJmBC6pCxnzas=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "6e4233dc54850e8aff6eff401400e9a9343881eb",
+        "rev": "2e7bcdc4ef73aa56abd2f970e5a8b9c0cc87e614",
         "type": "github"
       },
       "original": {
@@ -114,16 +114,16 @@
     "holochain": {
       "flake": false,
       "locked": {
-        "lastModified": 1723718736,
-        "narHash": "sha256-f8Hi7HvANahU5lJjtWk+XpnCcIjfMiV0yFxGqzqEXqU=",
+        "lastModified": 1724408854,
+        "narHash": "sha256-sWA4dKp92TPDVuOS2wHTaqXdXUWYPFnsbSobUtgpluM=",
         "owner": "holochain",
         "repo": "holochain",
-        "rev": "a3384305850735b1b71fa0ab6f36f2318ec56d28",
+        "rev": "89e195974eb4bec05a8215adb7029923f2fac6af",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "holochain-0.4.0-dev.18",
+        "ref": "holochain-0.4.0-dev.20",
         "repo": "holochain",
         "type": "github"
       }
@@ -150,11 +150,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723631911,
-        "narHash": "sha256-+GTVM5dvmqAXQAVHrH4qeE91kQ5t1/tgRXX+eNJ2KkM=",
+        "lastModified": 1724426901,
+        "narHash": "sha256-26UfRywpTgBdYUqWXgnzcgeId2wyiEEoieo4OZ7+OMQ=",
         "owner": "holochain",
         "repo": "holonix",
-        "rev": "72ca4ab48e286dff3f3beac097eeb119c8524ca9",
+        "rev": "cd1bc9894958dc749841503bf2032137e3b2a9c6",
         "type": "github"
       },
       "original": {
@@ -166,16 +166,16 @@
     "lair-keystore": {
       "flake": false,
       "locked": {
-        "lastModified": 1717684904,
-        "narHash": "sha256-vcXt67Tl1qwVUkx8CBevdQocqZXUEeoXjaYw86ljsYo=",
+        "lastModified": 1724340490,
+        "narHash": "sha256-zKcYTefiJaDkgNLhH7bUEmL6j1QfiSNCK/hwBv9/Hxs=",
         "owner": "holochain",
         "repo": "lair",
-        "rev": "6a84ed490fc7074d107e38bbb4a8d707e9b8e066",
+        "rev": "70e2bd906af7f757cc03ac54b257df884b442ae8",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "lair_keystore-v0.4.5",
+        "ref": "lair_keystore-v0.5.0",
         "repo": "lair",
         "type": "github"
       }
@@ -223,11 +223,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1723648323,
-        "narHash": "sha256-AT6K9JREduWC1zcIJIx8JTZa4sYZD6VvyB/xRnjphqY=",
+        "lastModified": 1724345276,
+        "narHash": "sha256-MKvjkqVL/RJ3QXOA8tSUoK7HHXVGSB2AL+vKxU4Cf+c=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "64a140527b383e3a2fe95908881624fc5374c60c",
+        "rev": "9b724459b5900c2424f5069023d6596a8617284b",
         "type": "github"
       },
       "original": {
@@ -244,11 +244,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723688259,
-        "narHash": "sha256-WzeUR1MG9MnJnh9T7qcVe/v12qHvJvzdc3Z5HCeE2ns=",
+        "lastModified": 1724379657,
+        "narHash": "sha256-+CFDh1FUgyY7q0FiWhKJpHS7LlD3KbiqN5Z4Z+4bGmc=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "6e75319846684326d900daff1e2e11338cc80d2b",
+        "rev": "a18034322c7703fcfe5d7352a77981ba4a936a61",
         "type": "github"
       },
       "original": {
