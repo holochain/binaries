@@ -6,7 +6,6 @@
 
     crane = {
       url = "github:ipetkov/crane";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     flake-utils.url = "github:numtide/flake-utils";
@@ -24,7 +23,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/holochain-0.4.0-dev.21";
+      url = "github:holochain/holochain/holochain-0.4.0-dev.22";
       flake = false;
     };
 
