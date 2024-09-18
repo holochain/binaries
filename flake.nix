@@ -23,12 +23,12 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/holochain-0.4.0-dev.24";
+      url = "github:holochain/holochain/holochain-0.4.0-dev.25";
       flake = false;
     };
 
     lair-keystore = {
-      url = "github:holochain/lair/lair_keystore-v0.5.0";
+      url = "github:holochain/lair/lair_keystore-v0.5.1";
       flake = false;
     };
 
