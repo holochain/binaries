@@ -79,7 +79,7 @@ let
         # See: https://doc.rust-lang.org/cargo/reference/config.html#target
         CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
         CARGO_TARGET_AARCH64_UNKNOWN_APPLE_LINKER = "${stdenv.cc.targetPrefix}cc";
-        CARGO_PROFILE="release";
+        CARGO_PROFILE = "release";
 
         # Tell cargo which target we want to build (so it doesn't default to the build system).
         cargoExtraArgs = "--target ${rustTargetTriple}";
