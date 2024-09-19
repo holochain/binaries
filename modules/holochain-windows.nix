@@ -55,6 +55,7 @@ let
     doCheck = false;
 
     CARGO_BUILD_TARGET = "x86_64-pc-windows-gnu";
+    CARGO_PROFILE="release";
 
     # fixes issues related to libring
     TARGET_CC = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
