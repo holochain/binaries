@@ -23,7 +23,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/?ref=6beea809f9aa95245b338c693c89b8a130a604b1"; # holochain-0.4.0-dev.25 + fixes to build on nightly Rust
+      url = "github:holochain/holochain/?ref=slim-down-release-builds-part-1"; # holochain-0.4.0-dev.25 + fixes to build on nightly Rust and release opt
       flake = false;
     };
 
