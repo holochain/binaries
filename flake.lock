@@ -2,11 +2,11 @@
   "nodes": {
     "crane": {
       "locked": {
-        "lastModified": 1725409566,
-        "narHash": "sha256-PrtLmqhM6UtJP7v7IGyzjBFhbG4eOAHT6LPYOFmYfbk=",
+        "lastModified": 1727235847,
+        "narHash": "sha256-MoEot8izwkfGm1h5ak8hS2bu59mLmKeevlP/OvFLCzM=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "7e4586bad4e3f8f97a9271def747cf58c4b68f3c",
+        "rev": "08f45b5a2e01cf34ca6081188c6d16aa35581b09",
         "type": "github"
       },
       "original": {
@@ -23,11 +23,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1726727555,
-        "narHash": "sha256-WAYoFXry7bU3UXCFklX6tBOfBdZUHi+MeIk1JxUKNEo=",
+        "lastModified": 1727245890,
+        "narHash": "sha256-B4gUhZxqdn24PqL7z7ZuvLOS84HVskhKRByWdgA4/RI=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "3b974166133158907839fe20147e11696fade644",
+        "rev": "de3acda8b67b92abeeb35ac236924afd959874ad",
         "type": "github"
       },
       "original": {
@@ -109,16 +109,16 @@
     "holochain": {
       "flake": false,
       "locked": {
-        "lastModified": 1726749408,
-        "narHash": "sha256-q0Vza1QvZ4HlHzVvMFsHLR4YOhUm20mXbNTNUUtj7yo=",
+        "lastModified": 1727226305,
+        "narHash": "sha256-a4zt59D7LRnhkryusxyDGCmBxB2GOmEJDCOTLab1gY0=",
         "owner": "holochain",
         "repo": "holochain",
-        "rev": "a642a124bebd7a0c4d6e66b873dcfd85530e6854",
+        "rev": "b42fb1ba3c439a7fe561cc627c5d53280fd2a83b",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "slim-down-release-builds-part-1",
+        "ref": "holochain-0.4.0-dev.26",
         "repo": "holochain",
         "type": "github"
       }
@@ -145,11 +145,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726665849,
-        "narHash": "sha256-c6+HhJ5xSUuCVbvS67+52EDH8cSDCWYk5c2v84/yZqw=",
+        "lastModified": 1727175561,
+        "narHash": "sha256-eRTto85IVBo4dMLr91Y40Qf71YFc3V0kPimvSxvXFEw=",
         "owner": "holochain",
         "repo": "holonix",
-        "rev": "25e2d39e876b93cfef091f484e80dafcf287bf83",
+        "rev": "5505e4f9569fabd73f26a5c7cc02ae94a73f6bce",
         "type": "github"
       },
       "original": {
@@ -161,16 +161,16 @@
     "lair-keystore": {
       "flake": false,
       "locked": {
-        "lastModified": 1726521249,
-        "narHash": "sha256-SZPhvZ7D5tNr3dKuxUp/zUOnfFe8UBG/uqWc9vQgUMM=",
+        "lastModified": 1726865440,
+        "narHash": "sha256-+ARQs+Sfmh8QXMyjjHjm6Ib8Ag86Jm2vnyB6l3zTCgA=",
         "owner": "holochain",
         "repo": "lair",
-        "rev": "6bbd604bff3d5eda528bb2da9c3aa1e1e71e429d",
+        "rev": "9f306efed597765b70da704e1739ecc67f2510e0",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "lair_keystore-v0.5.1",
+        "ref": "lair_keystore-v0.5.2",
         "repo": "lair",
         "type": "github"
       }
@@ -218,11 +218,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1726443025,
-        "narHash": "sha256-nCmG4NJpwI0IoIlYlwtDwVA49yuspA2E6OhfCOmiArQ=",
+        "lastModified": 1727104575,
+        "narHash": "sha256-lB/ZS0SnHyE8Z3G8DIL/QJPg6w6x5ZhgVO2pBqnz89g=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "94b526fc86eaa0e90fb4d54a5ba6313aa1e9b269",
+        "rev": "3d0343251fe084b335b55c17a52bb4a3527b1bd0",
         "type": "github"
       },
       "original": {
@@ -239,11 +239,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726712837,
-        "narHash": "sha256-Ob7DNyHKtOQpWetmNj/V+OgMkGXh6Ep1dNa6AN/4sSI=",
+        "lastModified": 1727231386,
+        "narHash": "sha256-XLloPtQHKk/Tdt8t8zIb+JhmunlH3YB9Jz8RTlQ3N/4=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "6283b1d6ca31fa320ecee82806123e773b2ff993",
+        "rev": "b5f76c3b09a8194889f5328a480fbea1a9115518",
         "type": "github"
       },
       "original": {

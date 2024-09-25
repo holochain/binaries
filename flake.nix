@@ -23,12 +23,12 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/?ref=slim-down-release-builds-part-1"; # holochain-0.4.0-dev.25 + fixes to build on nightly Rust and release opt
+      url = "github:holochain/holochain/?ref=holochain-0.4.0-dev.26";
       flake = false;
     };
 
     lair-keystore = {
-      url = "github:holochain/lair/lair_keystore-v0.5.1";
+      url = "github:holochain/lair/lair_keystore-v0.5.2";
       flake = false;
     };
 
@@ -45,6 +45,8 @@
   outputs = inputs @ { nixpkgs, crane, flake-utils, rust-overlay, ... }:
     flake-utils.lib.eachDefaultSystem
       (localSystem: {
+        formatter = nixpkgs.legacyPackages.${localSystem}.nixpkgs-fmt;
+
         packages =
           let
             pkgs = nixpkgs.legacyPackages.${localSystem};
@@ -141,8 +143,5 @@
               patchelf
             ]);
           };
-      }) // {
-      # Add dev helpers that are not required to be platform agnostic
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-    };
+      });
 }
