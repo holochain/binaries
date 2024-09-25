@@ -62,6 +62,11 @@
                 crossSystem = "x86_64-linux";
                 rustTargetTriple = "x86_64-unknown-linux-gnu";
               };
+              "${package}_arm-gnueabihf" = import ./modules/holochain-cross.nix {
+                inherit localSystem inputs crate package;
+                crossSystem = "armhf-embedded";
+                rustTargetTriple = "arm-unknown-linux-gnueabihf";
+              };
               "${package}_x86_64-windows" = import ./modules/holochain-windows.nix {
                 inherit localSystem inputs crate package;
               };
