@@ -23,7 +23,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/?ref=holochain-0.4.0-dev.27";
+      url = "github:holochain/holochain/?ref=expose-wasmer-production-compiler";
       flake = false;
     };
 
@@ -56,14 +56,17 @@
                 inherit localSystem inputs crate package;
                 crossSystem = "aarch64-linux";
                 rustTargetTriple = "aarch64-unknown-linux-gnu";
+                cargoArgs = "--features wasmer_compiler_production";
               };
               "${package}_x86_64-linux" = import ./modules/holochain-cross.nix {
                 inherit localSystem inputs crate package;
                 crossSystem = "x86_64-linux";
                 rustTargetTriple = "x86_64-unknown-linux-gnu";
+                cargoArgs = "--features wasmer_compiler_production";
               };
               "${package}_x86_64-windows" = import ./modules/holochain-windows.nix {
                 inherit localSystem inputs crate package;
+                cargoArgs = "--features wasmer_compiler_production";
               };
             } // (if localSystem == "aarch64-darwin" then {
               # Only define darwin builds if we're on a darwin host because Apple don't like people cross compiling
@@ -72,12 +75,14 @@
                 inherit localSystem inputs crate package;
                 crossSystem = "aarch64-darwin";
                 rustTargetTriple = "aarch64-apple-darwin";
+                cargoArgs = "--features wasmer_compiler_production";
               };
             } else if localSystem == "x86_64-darwin" then {
               "${package}_x86_64-apple" = import ./modules/holochain-cross.nix {
                 inherit localSystem inputs crate package;
                 crossSystem = "x86_64-darwin";
                 rustTargetTriple = "x86_64-apple-darwin";
+                cargoArgs = "--features wasmer_compiler_production";
               };
             } else { });
 

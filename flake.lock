@@ -92,11 +92,11 @@
     "hc-scaffold": {
       "flake": false,
       "locked": {
-        "lastModified": 1725629251,
-        "narHash": "sha256-23TjhOgXdLOX05yGDK8ZVTZxovbFiGz2Mu+H45YLpAA=",
+        "lastModified": 1727375207,
+        "narHash": "sha256-wGS+cOhvakLWscqPI0LaBZVZ3ryORV3YDvL+bfhI+WA=",
         "owner": "holochain",
         "repo": "scaffolding",
-        "rev": "d415a38e686faf38c91689e176b62a93bd51b188",
+        "rev": "b218f253a124b6e7b5be0600c3aab7a57344f0f2",
         "type": "github"
       },
       "original": {
@@ -109,16 +109,16 @@
     "holochain": {
       "flake": false,
       "locked": {
-        "lastModified": 1727364075,
-        "narHash": "sha256-VNgxDgeq2sX/L7D8J7F3QErqMVKdZTCX6SR3Cs5YKgM=",
+        "lastModified": 1727458860,
+        "narHash": "sha256-AXvGkhPA0600KFTBEbMD3QGCSmDGnKp/WebMvHsoJB8=",
         "owner": "holochain",
         "repo": "holochain",
-        "rev": "116f88d9baaf2b710c7cbbb7776a4b09e311b076",
+        "rev": "3c07eefee398e99225126e61c445e75768ed2fb6",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "holochain-0.4.0-dev.27",
+        "ref": "expose-wasmer-production-compiler",
         "repo": "holochain",
         "type": "github"
       }
@@ -145,11 +145,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1727381822,
-        "narHash": "sha256-wa8racInCgydxkm9KOv4DQzqldAMLPnrEisl3jT0ofw=",
+        "lastModified": 1727451463,
+        "narHash": "sha256-RR34nP2jqczALL7H9ESWW7sVyyN73/tx3pOMAq8E3VE=",
         "owner": "holochain",
         "repo": "holonix",
-        "rev": "e78f71a0bf90ff538792d5b9a60c476dc87096bd",
+        "rev": "447ac1e1e9bb323b94c05c06d224ee22211817dc",
         "type": "github"
       },
       "original": {

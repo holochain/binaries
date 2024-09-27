@@ -7,6 +7,9 @@
 , crate
   # The name of the package to build, from the selected crate.
 , package
+  # Additional arguments to pass to the cargo build command
+, cargoArgs
+, ...
 }:
 let
   inherit (inputs) nixpkgs crane fenix;
@@ -88,5 +91,5 @@ craneLib.buildPackage (commonArgs // {
 
   inherit cargoArtifacts;
 
-  cargoExtraArgs = "--package ${package}";
+  cargoExtraArgs = "--package ${package} ${cargoArgs}";
 })
