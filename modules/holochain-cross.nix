@@ -11,6 +11,8 @@
 , crossSystem
   # The target that Rust should be configured to use
 , rustTargetTriple
+  # Additional arguments to pass to the cargo build command
+, cargoArgs
 , ...
 }:
 let
@@ -41,6 +43,9 @@ let
     , pkg-config
     , go
     , perl
+    , llvm_15
+    , libffi
+    , libxml2
     , stdenv
     }:
     let
@@ -73,6 +78,9 @@ let
           stdenv.cc
           go
           perl
+          llvm_15
+          libffi
+          libxml2
         ];
 
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
@@ -108,7 +116,7 @@ let
 
       inherit cargoArtifacts;
 
-      cargoExtraArgs = "${commonArgs.cargoExtraArgs} --package ${package}";
+      cargoExtraArgs = "${commonArgs.cargoExtraArgs} --package ${package} ${cargoArgs}";
     });
 in
 # Dispatch the crate expression to run the cross compile
