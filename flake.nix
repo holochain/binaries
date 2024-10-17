@@ -133,8 +133,8 @@
               };
               unpackPhase = "true";
               installPhase = ''
-                mkdir -p $out
-                cp ${inputs.holonix.packages.${localSystem}.lair-keystore}/bin/lair-keystore $out
+                mkdir -p $out/bin
+                cp ${inputs.holonix.packages.${localSystem}.lair-keystore}/bin/lair-keystore $out/bin/
               '';
             };
           in
