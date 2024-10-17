@@ -23,7 +23,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/?ref=holochain-0.4.0-dev.28";
+      url = "github:holochain/holochain/?ref=holochain-0.5.0-dev.0";
       flake = false;
     };
 
@@ -33,7 +33,7 @@
     };
 
     holonix = {
-      url = "github:holochain/holonix";
+      url = "github:holochain/holonix?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.crane.follows = "crane";
       inputs.rust-overlay.follows = "rust-overlay";
