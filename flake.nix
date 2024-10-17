@@ -113,11 +113,28 @@
             } else { });
 
             extractHolochainBin = bin: pkgs.stdenv.mkDerivation {
-              name = bin;
+              pname = bin;
+              version = inputs.holonix.packages.${localSystem}.holochain.version;
+              meta = {
+                mainProgram = bin;
+              };
               unpackPhase = "true";
               installPhase = ''
                 mkdir -p $out/bin
                 cp ${inputs.holonix.packages.${localSystem}.holochain}/bin/${bin} $out/bin
+              '';
+            };
+
+            lairKeystoreDrv = pkgs.stdenv.mkDerivation {
+              pname = "lair-keystore";
+              version = inputs.holonix.packages.${localSystem}.lair-keystore.version;
+              meta = {
+                mainProgram = "lair-keystore";
+              };
+              unpackPhase = "true";
+              installPhase = ''
+                mkdir -p $out
+                cp ${inputs.holonix.packages.${localSystem}.lair-keystore}/bin/lair-keystore $out
               '';
             };
           in
@@ -130,7 +147,7 @@
             holonix_hc = extractHolochainBin "hc";
             holonix_hc_run_local_services = extractHolochainBin "hc-run-local-services";
             holonix_hcterm = extractHolochainBin "hcterm";
-            holonix_lair_keystore = inputs.holonix.packages.${localSystem}.lair-keystore;
+            holonix_lair_keystore = lairKeystoreDrv;
           } else { })
         ;
 

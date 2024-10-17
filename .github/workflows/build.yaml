@@ -276,32 +276,32 @@ jobs:
       - name: Bundle Lair Keystore
         run: |
           nix bundle .#holonix_lair_keystore
-          ./lair-keystore --version
-          cp ./lair-keystore deploy/lair-keystore-x86-64-linux-bundle
+          ./lair-keystore-arx --version
+          cp ./lair-keystore-arx deploy/lair-keystore-x86-64-linux-bundle
 
       - name: Bundle Holochain
         run: |
           nix bundle .#holonix_holochain
-          ./holochain --version
-          cp ./holochain deploy/holochain-x86-64-linux-bundle
+          ./holochain-arx --version
+          cp ./holochain-arx deploy/holochain-x86-64-linux-bundle
 
       - name: Bundle the `hc` CLI
         run: |
           nix bundle .#holonix_hc
-          ./hc --version
-          cp ./hc deploy/hc-x86-64-linux-bundle
+          ./hc-arx --version
+          cp ./hc-arx deploy/hc-x86-64-linux-bundle
 
       - name: Bundle the `hc-run-local-services` CLI
         run: |
           nix bundle .#holonix_hc_run_local_services
-          ./hc-run-local-services --version
-          cp ./hc-run-local-services deploy/hc-run-local-services-x86-64-linux-bundle
+          ./hc-run-local-services-arx --version
+          cp ./hc-run-local-services-arx deploy/hc-run-local-services-x86-64-linux-bundle
 
       - name: Bundle the `hcterm` CLI
         run: |
           nix bundle .#holonix_hcterm
-          ./hcterm --version
-          cp ./hcterm deploy/hcterm-x86-64-linux-bundle
+          ./hcterm-arx --version
+          cp ./hcterm-arx deploy/hcterm-x86-64-linux-bundle
 
       - name: Upload artifacts to release
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
