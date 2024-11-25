@@ -23,7 +23,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/?ref=holochain-0.4.0-rc.0";
+      url = "github:holochain/holochain/?ref=holochain-0.4.0-rc.1";
       flake = false;
     };
 
