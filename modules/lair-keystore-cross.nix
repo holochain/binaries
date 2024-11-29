@@ -70,6 +70,7 @@ let
         buildInputs = [ ] ++ (pkgs.lib.optionals pkgs.stdenv.isDarwin [
           # additional packages needed for darwin platforms
           pkgs.darwin.apple_sdk.frameworks.Security
+          pkgs.darwin.libobjc
         ]);
 
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
