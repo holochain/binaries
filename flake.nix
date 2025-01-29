@@ -2,7 +2,7 @@
   description = "Utility for producing Holochain binaries";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-24.11";
 
     crane = {
       url = "github:ipetkov/crane";
@@ -23,7 +23,7 @@
     };
 
     holochain = {
-      url = "github:holochain/holochain/?ref=holochain-0.4.0";
+      url = "github:holochain/holochain/?ref=holochain-0.4.1";
       flake = false;
     };
 
