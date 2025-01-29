@@ -1,6 +1,6 @@
 {}:
 {
-  rustVersion = "1.79.0";
+  rustVersion = "1.81.0";
 
   mkLibSodium = pkgs: pkgs.stdenv.mkDerivation {
     name = "libsodium";
