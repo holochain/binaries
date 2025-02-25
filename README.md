@@ -5,7 +5,7 @@ Holochain binaries for supported platforms
 
 Looking after the binaries build is reasonably simple, until something breaks. The main things to look for are:
 - The `flake.nix` that defines builds of `holochain`, `hc`, `hc_run_local_services`, `hcterm` and `lair-keystore` for 
-  Windows, macOS (Intel and Silicon) and Linux.
+  Windows, macOS (Intel and Apple Silicon) and Linux.
 - The `flake.nix` also defines Nix bundles for each of these binaries, which depend on Holonix.
 - The `build.yaml` that is a multi-purpose build workflow. It is used to check PRs but if run manually with a tag, it 
   will also publish binaries to the `holochain` repository.
@@ -22,9 +22,9 @@ branches are for released versions. Doing a bump on any branch follows the same 
 - Create a branch, commit and push the changes.
 - Open a PR to the appropriate base branch. This will use `build.yaml` to verify that everything builds. This takes a 
   while but the results are cached!
-- If everything looks good. Merge the PR and go to the Actions tab in GitHub. Find the `build` workflow and run it 
+- If everything looks good, merge the PR and go to the Actions tab in GitHub. Find the `Build` workflow and run it 
   manually with the tag of the new Holochain version. This will build the binaries and publish them to the associated
   release on the`holochain` repository.
-- Once the binaries are published, you can run the `check` workflow against the new release to make sure everything 
-  works as expected. This is not absolutely necessary and it should probably be automated at some point but it's a good
+- Once the binaries are published, you can run the `check` workflow against the same version tag to make sure everything 
+  works as expected. This is not absolutely necessary and it should probably be automated at some point, but it's a good
   idea to check at least on release branches.
