@@ -61,6 +61,12 @@ jobs:
           nix build .#lair_keystore_aarch64-linux
           cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-linux
 
+      - name: Build Lair Keystore for armv7-unknown-linux-gnueabihf
+        continue-on-error: true
+        run: |
+          nix build .#lair_keystore_armv7-linux
+          cp ./result/bin/lair-keystore deploy/lair-keystore-armv7-linux
+
       # Holochain
       - name: Build Holochain for x86_64-unknown-linux-gnu
         run: |
@@ -72,6 +78,12 @@ jobs:
         run: |
           nix build .#holochain_aarch64-linux
           cp ./result/bin/holochain deploy/holochain-aarch64-linux
+
+      - name: Build Holochain for armv7-unknown-linux-gnueabihf
+        continue-on-error: true
+        run: |
+          nix build .#holochain_armv7-linux
+          cp ./result/bin/holochain deploy/holochain-armv7-linux
 
       # hc CLI
       - name: Build the `hc` CLI for x86_64-unknown-linux-gnu
@@ -85,29 +97,46 @@ jobs:
           nix build .#holochain_cli_aarch64-linux
           cp ./result/bin/hc deploy/hc-aarch64-linux
 
+      - name: Build the `hc` CLI for armv7-unknown-linux-gnueabihf
+        continue-on-error: true
+        run: |
+          nix build .#holochain_cli_armv7-linux
+          cp ./result/bin/hc deploy/hc-armv7-linux
+
       # hc-run-local-services CLI
-      - name: Build the holochain-cli-run-local CLI for x86_64-unknown-linux-gnu
+      - name: Build the `holochain-cli-run-local-services` CLI for x86_64-unknown-linux-gnu
         run: |
           nix build .#holochain_cli_run_local_services_x86_64-linux
           ./result/bin/hc-run-local-services --version
           nix develop --command ./scripts/export-binary-x86_64-linux.sh hc-run-local-services ./deploy
 
-      - name: Build the holochain-cli-run-local CLI for aarch64-unknown-linux-gnu
+      - name: Build the `holochain-cli-run-local` CLI for aarch64-unknown-linux-gnu
         run: |
           nix build .#holochain_cli_run_local_services_aarch64-linux
           cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-aarch64-linux
 
+      - name: Build the `holochain-cli-run-local-services` CLI for armv7-unknown-linux-gnueabihf
+        continue-on-error: true
+        run: |
+          nix build .#holochain_cli_run_local_services_armv7-linux
+          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-armv7-linux
+
       # hcterm CLI
-      - name: Build the hcterm CLI for x86_64-unknown-linux-gnu
+      - name: Build the `hcterm` CLI for x86_64-unknown-linux-gnu
         run: |
           nix build .#hcterm_x86_64-linux
           ./result/bin/hcterm --version
           nix develop --command ./scripts/export-binary-x86_64-linux.sh hcterm ./deploy
 
-      - name: Build the hcterm CLI for aarch64-unknown-linux-gnu
+      - name: Build the `hcterm` CLI for aarch64-unknown-linux-gnu
         run: |
           nix build .#hcterm_aarch64-linux
           cp ./result/bin/hcterm deploy/hcterm-aarch64-linux
+
+      - name: Build the `hcterm` CLI for armv7-unknown-linux-gnueabihf
+        run: |
+          nix build .#hcterm_armv7-linux
+          cp ./result/bin/hcterm deploy/hcterm-armv7-linux
 
       - name: Upload artifacts to release
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}

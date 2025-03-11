@@ -65,6 +65,11 @@
               "${package}_x86_64-windows" = import ./modules/holochain-windows.nix {
                 inherit localSystem inputs crate package;
               };
+              "${package}_armv7-linux" = import ./modules/holochain-cross.nix {
+                inherit localSystem inputs crate package;
+                crossSystem = "armv7l-linux";
+                rustTargetTriple = "armv7-unknown-linux-gnueabihf";
+              };
             } // (if localSystem == "aarch64-darwin" then {
               # Only define darwin builds if we're on a darwin host because Apple don't like people cross compiling
               # from other systems.
@@ -94,6 +99,11 @@
               };
               lair_keystore_x86_64-windows = import ./modules/lair-keystore-windows.nix {
                 inherit localSystem inputs;
+              };
+              lair_keystore_armv7-linux = import ./modules/lair-keystore-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "armv7l-linux";
+                rustTargetTriple = "armv7-unknown-linux-gnueabihf";
               };
             } // (if localSystem == "aarch64-darwin" then {
               # Only define darwin builds if we're on a darwin host because Apple don't like people cross compiling
