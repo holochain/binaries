@@ -152,7 +152,7 @@
               pname = "bootstrap-srv";
               version = inputs.holonix.packages.${localSystem}.bootstrap-srv.version;
               meta = {
-                mainProgram = "bootstrap-srv";
+                mainProgram = "kitsune2-bootstrap-srv";
               };
               unpackPhase = "true";
               installPhase = ''

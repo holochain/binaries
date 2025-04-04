@@ -276,6 +276,11 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Bundle the Kitsune2 bootstrap srv
+        run: |
+          nix bundle .#holonix_bootstrap_srv
+          cp ./bootstrap-srv-arx deploy/kitsune2-bootstrap-srv-x86-64-linux-bundle
+
       - name: Bundle Lair Keystore
         run: |
           nix bundle .#holonix_lair_keystore
@@ -290,11 +295,6 @@ jobs:
         run: |
           nix bundle .#holonix_hc
           cp ./hc-arx deploy/hc-x86-64-linux-bundle
-
-      - name: Bundle the `hc-run-local-services` CLI
-        run: |
-          nix bundle .#holonix_hc_run_local_services
-          cp ./hc-run-local-services-arx deploy/hc-run-local-services-x86-64-linux-bundle
 
       - name: Bundle the `hcterm` CLI
         run: |

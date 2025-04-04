@@ -40,6 +40,8 @@ let
     { lib
     , pkg-config
     , perl
+    , cmake
+    , clang
     , stdenv
     }:
     let
@@ -71,7 +73,10 @@ let
           pkg-config
           stdenv.cc
           perl
-        ];
+          cmake
+        ] ++ (pkgs.lib.optionals (crossSystem != "x86_64-darwin") [
+            clang
+        ]);
 
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
         # and `cargo run`.
@@ -81,6 +86,8 @@ let
         CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${stdenv.cc.targetPrefix}cc";
         CARGO_TARGET_AARCH64_UNKNOWN_APPLE_LINKER = "${stdenv.cc.targetPrefix}cc";
         CARGO_PROFILE = "release";
+
+        LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
 
         # Tell cargo which target we want to build (so it doesn't default to the build system).
         cargoExtraArgs = "--target ${rustTargetTriple}";

@@ -65,8 +65,11 @@ let
 
     SODIUM_LIB_DIR = "${libsodium}/lib";
 
+    LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
+
     nativeBuildInputs = with pkgs; [
       perl
+      cmake
     ];
 
     depsBuildBuild = with pkgs; [
