@@ -49,6 +49,9 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Create deploy dir
+        run: mkdir -p deploy
+
       # Bootstrap srv
       - name: Build the Kitsune2 bootstrap srv for x86_64-unknown-linux-gnu
         run: |
@@ -133,6 +136,9 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Create deploy dir
+        run: mkdir -p deploy
+
       - name: Build the Kitsune2 bootstrap srv for x86_64-pc-windows-gnu
         run: |
           nix build -L .#bootstrap_srv_x86_64-windows
@@ -165,7 +171,6 @@ jobs:
         run: |
           gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
 
-
   build-from-apple:
     runs-on: macos-latest
     needs: [verify-flake]
@@ -178,11 +183,14 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Create deploy dir
+        run: mkdir -p deploy
+
       - name: Build the Kitsune2 bootstrap srv for aarch64-apple-darwin
         run: |
-          nix build -L .#lair_keystore_aarch64-apple
-          ./result/bin/lair-keystore --version
-          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
+          nix build -L .#bootstrap_srv_aarch64-apple
+          ./result/bin/kitsune2-bootstrap-srv --version
+          cp ./result/bin/kitsune2-bootstrap-srv deploy/kitsune2-bootstrap-srv-aarch64-apple
 
       - name: Build Lair Keystore for aarch64-apple-darwin
         run: |
@@ -226,6 +234,9 @@ jobs:
       - uses: ./.github/actions/common-setup
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Create deploy dir
+        run: mkdir -p deploy
 
       - name: Build the Kitsune2 bootstrap srv for x86_64-apple-darwin
         run: |
