@@ -52,66 +52,66 @@ jobs:
       # Bootstrap srv
       - name: Build the Kitsune2 bootstrap srv for x86_64-unknown-linux-gnu
         run: |
-          nix build .#bootstrap_srv_x86_64-linux
+          nix build -L .#bootstrap_srv_x86_64-linux
           ./result/bin/kitsune2-bootstrap-srv --version
           nix develop --command ./scripts/export-binary-x86_64-linux.sh kitsune2-bootstrap-srv ./deploy
 
       - name: Build the Kitsune2 bootstrap srv for aarch64-unknown-linux-gnu
         run: |
-          nix build .#bootstrap_srv_aarch64-linux
+          nix build -L .#bootstrap_srv_aarch64-linux
           cp ./result/bin/kitsune2-bootstrap-srv deploy/kitsune2-bootstrap-srv-aarch64-linux
 
       # Lair Keystore
       - name: Build Lair Keystore for x86_64-unknown-linux-gnu
         run: |
-          nix build .#lair_keystore_x86_64-linux
+          nix build -L .#lair_keystore_x86_64-linux
           ./result/bin/lair-keystore --version
           nix develop --command ./scripts/export-binary-x86_64-linux.sh lair-keystore ./deploy
 
       - name: Build Lair Keystore for aarch64-unknown-linux-gnu
         run: |
-          nix build .#lair_keystore_aarch64-linux
+          nix build -L .#lair_keystore_aarch64-linux
           cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-linux
 
       # Holochain
       - name: Build Holochain for x86_64-unknown-linux-gnu
         run: |
-          nix build .#holochain_x86_64-linux
+          nix build -L .#holochain_x86_64-linux
           ./result/bin/holochain --version
           nix develop --command ./scripts/export-binary-x86_64-linux.sh holochain ./deploy
 
       - name: Build Holochain for aarch64-unknown-linux-gnu
         run: |
-          nix build .#holochain_aarch64-linux
+          nix build -L .#holochain_aarch64-linux
           cp ./result/bin/holochain deploy/holochain-aarch64-linux
 
       # hc CLI
       - name: Build the `hc` CLI for x86_64-unknown-linux-gnu
         run: |
-          nix build .#holochain_cli_x86_64-linux
+          nix build -L .#holochain_cli_x86_64-linux
           ./result/bin/hc --version
           nix develop --command ./scripts/export-binary-x86_64-linux.sh hc ./deploy
 
       - name: Build the `hc` CLI for aarch64-unknown-linux-gnu
         run: |
-          nix build .#holochain_cli_aarch64-linux
+          nix build -L .#holochain_cli_aarch64-linux
           cp ./result/bin/hc deploy/hc-aarch64-linux
 
       - name: Build the holochain-cli-run-local CLI for aarch64-unknown-linux-gnu
         run: |
-          nix build .#holochain_cli_run_local_services_aarch64-linux
+          nix build -L .#holochain_cli_run_local_services_aarch64-linux
           cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-aarch64-linux
 
       # hcterm CLI
       - name: Build the hcterm CLI for x86_64-unknown-linux-gnu
         run: |
-          nix build .#hcterm_x86_64-linux
+          nix build -L .#hcterm_x86_64-linux
           ./result/bin/hcterm --version
           nix develop --command ./scripts/export-binary-x86_64-linux.sh hcterm ./deploy
 
       - name: Build the hcterm CLI for aarch64-unknown-linux-gnu
         run: |
-          nix build .#hcterm_aarch64-linux
+          nix build -L .#hcterm_aarch64-linux
           cp ./result/bin/hcterm deploy/hcterm-aarch64-linux
 
       - name: Upload artifacts to release
@@ -135,27 +135,27 @@ jobs:
 
       - name: Build the Kitsune2 bootstrap srv for x86_64-pc-windows-gnu
         run: |
-          nix build .#bootstrap_srv_x86_64-windows
+          nix build -L .#bootstrap_srv_x86_64-windows
           cp ./result/bin/kitsune2-bootstrap-srv.exe deploy/kitsune2-bootstrap-srv-x86_64-windows.exe
 
       - name: Build Lair Keystore for x86_64-pc-windows-gnu
         run: |
-          nix build .#lair_keystore_x86_64-windows
+          nix build -L .#lair_keystore_x86_64-windows
           cp ./result/bin/lair-keystore.exe deploy/lair-keystore-x86_64-windows.exe
 
       - name: Build Holochain for x86_64-pc-windows-gnu
         run: |
-          nix build .#holochain_x86_64-windows
+          nix build -L .#holochain_x86_64-windows
           cp ./result/bin/holochain.exe deploy/holochain-x86_64-windows.exe
 
       - name: Build the `hc` CLI for x86_64-pc-windows-gnu
         run: |
-          nix build .#holochain_cli_x86_64-windows
+          nix build -L .#holochain_cli_x86_64-windows
           cp ./result/bin/hc.exe deploy/hc-x86_64-windows.exe
 
       - name: Build the hcterm CLI for x86_64-pc-windows-gnu
         run: |
-          nix build .#hcterm_x86_64-windows
+          nix build -L .#hcterm_x86_64-windows
           cp ./result/bin/hcterm.exe deploy/hcterm-x86_64-windows.exe
 
       - name: Upload artifacts to release
@@ -180,31 +180,31 @@ jobs:
 
       - name: Build the Kitsune2 bootstrap srv for aarch64-apple-darwin
         run: |
-          nix build .#lair_keystore_aarch64-apple
+          nix build -L .#lair_keystore_aarch64-apple
           ./result/bin/lair-keystore --version
           cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
 
       - name: Build Lair Keystore for aarch64-apple-darwin
         run: |
-          nix build .#lair_keystore_aarch64-apple
+          nix build -L .#lair_keystore_aarch64-apple
           ./result/bin/lair-keystore --version
           cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
 
       - name: Build Holochain for aarch64-apple-darwin
         run: |
-          nix build .#holochain_aarch64-apple
+          nix build -L .#holochain_aarch64-apple
           ./result/bin/holochain --version
           cp ./result/bin/holochain deploy/holochain-aarch64-apple
 
       - name: Build the `hc` CLI for aarch64-apple-darwin
         run: |
-          nix build .#holochain_cli_aarch64-apple
+          nix build -L .#holochain_cli_aarch64-apple
           ./result/bin/hc --version
           cp ./result/bin/hc deploy/hc-aarch64-apple
 
       - name: Build the `hcterm` CLI for aarch64-apple-darwin
         run: |
-          nix build .#hcterm_aarch64-apple
+          nix build -L .#hcterm_aarch64-apple
           ./result/bin/hcterm --version
           cp ./result/bin/hcterm deploy/hcterm-aarch64-apple
 
@@ -227,33 +227,33 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Build the Kitsune2 bootstrap srv for x86_64-apple-darwin
+        run: |
+          nix build -L .#bootstrap_srv_x86_64-apple
+          ./result/bin/kitsune2-bootstrap-srv --version
+          cp ./result/bin/kitsune2-bootstrap-srv deploy/kitsune2-bootstrap-srv-x86_64-apple
+
       - name: Build Lair Keystore for x86_64-apple-darwin
         run: |
-          nix build .#lair_keystore_x86_64-apple
+          nix build -L .#lair_keystore_x86_64-apple
           ./result/bin/lair-keystore --version
           cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-apple
 
       - name: Build Holochain for x86_64-apple-darwin
         run: |
-          nix build .#holochain_x86_64-apple
+          nix build -L .#holochain_x86_64-apple
           ./result/bin/holochain --version
           cp ./result/bin/holochain deploy/holochain-x86_64-apple
 
       - name: Build the `hc` CLI for x86_64-apple-darwin
         run: |
-          nix build .#holochain_cli_x86_64-apple
+          nix build -L .#holochain_cli_x86_64-apple
           ./result/bin/hc --version
           cp ./result/bin/hc deploy/hc-x86_64-apple
 
-      - name: Build the `holochain-cli-run-local` CLI for x86_64-apple-darwin
-        run: |
-          nix build .#holochain_cli_run_local_services_x86_64-apple
-          ./result/bin/hc-run-local-services --version
-          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-x86_64-apple
-
       - name: Build the `hcterm` CLI for x86_64-apple-darwin
         run: |
-          nix build .#hcterm_x86_64-apple
+          nix build -L .#hcterm_x86_64-apple
           ./result/bin/hcterm --version
           cp ./result/bin/hcterm deploy/hcterm-x86_64-apple
 
@@ -314,7 +314,7 @@ jobs:
     needs:
       - verify-flake
       - build-from-linux-for-linux
-      - build-from-linux-for-windows
+      # - build-from-linux-for-windows
       - build-from-apple
       - build-from-legacy-apple
       - bundle-x86-64-linux
