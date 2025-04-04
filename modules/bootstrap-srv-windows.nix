@@ -44,9 +44,9 @@ let
     RUSTC_LINKER = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
 
     CARGO_TARGET_X86_64_PC_WINDOWS_GNU_RUSTFLAGS =
-                "-L native=${pkgs.pkgsCross.mingwW64.windows.pthreads}/lib";
+      "-L native=${pkgs.pkgsCross.mingwW64.windows.pthreads}/lib";
 
-    VERBOSE="1";
+    VERBOSE = "1";
 
     nativeBuildInputs = with pkgs; [
       perl
