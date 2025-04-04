@@ -69,7 +69,9 @@ let
           stdenv.cc
           perl
           cmake
-        ];
+        ] ++ (pkgs.lib.optionals (crossSystem == "x86_64-darwin") [
+          pkgs.apple-sdk_10_15
+        ]);
 
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
         # and `cargo run`.
