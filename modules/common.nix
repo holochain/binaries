@@ -16,6 +16,13 @@
     '';
   };
 
+  bootstrapSrv = { lib, craneLib, kitsune2 }: {
+    # Version defined at the root, so this can only be used to get the version, not the package name!
+    crateInfo = craneLib.crateNameFromCargoToml { cargoToml = kitsune2 + "/Cargo.toml"; };
+
+    src = craneLib.cleanCargoSource kitsune2;
+  };
+
   holochain = { lib, craneLib, holochain }:
     let
       # Crane filters out all non-cargo related files. Define include filter with files needed for build.

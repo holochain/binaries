@@ -3,10 +3,6 @@
   inputs
   # The system that we are compiling on
 , localSystem
-  # The crate to build, from the Holochain workspace. Must match the path to the Cargo.toml file.
-, crate
-  # The name of the package to build, from the selected crate.
-, package
 }:
 let
   inherit (inputs) nixpkgs crane fenix;
@@ -24,24 +20,7 @@ let
 
   craneLib = (crane.mkLib pkgs).overrideToolchain toolchain;
 
-  holochainCommon = common.holochain { inherit craneLib; lib = pkgs.lib; holochain = inputs.holochain; };
-
-  # Crane doesn't know which version to select from a workspace, so we tell it where to look
-  crateInfo = holochainCommon.crateInfo crate;
-
-  libsodium = pkgs.stdenv.mkDerivation {
-    name = "libsodium";
-    src = builtins.fetchurl {
-      url = "https://download.libsodium.org/libsodium/releases/libsodium-1.0.20-mingw.tar.gz";
-      sha256 = "sha256:09npqqrialraf2v4m6cicvhnj52p8jaya349wnzlklp31b0q3yq1";
-    };
-    unpackPhase = "true";
-    postInstall = ''
-      tar -xvf $src
-      mkdir -p $out
-      cp -r libsodium-win64/* $out
-    '';
-  };
+  bootstrapSrvCommon = common.bootstrapSrv { inherit craneLib; lib = pkgs.lib; kitsune2 = inputs.kitsune2; };
 
   commonArgs = {
     # Just used for building the workspace, will be replaced when building a specific crate
@@ -49,7 +28,7 @@ let
     version = "0.0.0";
 
     # Load source with a custom filter so we can include non-cargo files that get used during the build
-    src = holochainCommon.src;
+    src = bootstrapSrvCommon.src;
 
     strictDeps = true;
     doCheck = false;
@@ -57,22 +36,34 @@ let
     CARGO_BUILD_TARGET = "x86_64-pc-windows-gnu";
     CARGO_PROFILE = "release";
 
-    # fixes issues related to libring
+    cargoExtraArgs = "--package kitsune2_bootstrap_srv";
+
     TARGET_CC = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
 
-    # Otherwise tx5-go-pion-sys picks up the host linker instead of the cross linker
+    # Otherwise the build picks up the host linker instead of the cross linker
     RUSTC_LINKER = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
 
-    SODIUM_LIB_DIR = "${libsodium}/lib";
+    CARGO_TARGET_X86_64_PC_WINDOWS_GNU_RUSTFLAGS =
+                "-L native=${pkgs.pkgsCross.mingwW64.windows.pthreads}/lib";
+
+    VERBOSE="1";
 
     nativeBuildInputs = with pkgs; [
       perl
+      go
+      nasm
+      cmake
+      pkgsCross.mingwW64.stdenv.cc
+      pkgsCross.mingwW64.windows.pthreads
     ];
 
     depsBuildBuild = with pkgs; [
       pkgsCross.mingwW64.stdenv.cc
       pkgsCross.mingwW64.windows.pthreads
     ];
+
+    PERL_EXECUTABLE = "${pkgs.perl}/bin/perl";
+    GO_EXECUTABLE = "${pkgs.go}/bin/go";
   };
 
   # Build *just* the Cargo dependencies (of the entire workspace),
@@ -82,10 +73,10 @@ let
   cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 in
 craneLib.buildPackage (commonArgs // {
-  pname = package;
-  version = crateInfo.version;
+  pname = "bootstrap-srv";
+  version = bootstrapSrvCommon.crateInfo.version;
 
   inherit cargoArtifacts;
 
-  cargoExtraArgs = "--package ${package}";
+  cargoExtraArgs = "--package kitsune2_bootstrap_srv";
 })

@@ -3,10 +3,6 @@
   inputs
   # The system that we are compiling on
 , localSystem
-  # The crate to build, from the Holochain workspace. Must match the path to the Cargo.toml file.
-, crate
-  # The name of the package to build, from the selected crate.
-, package
   # The target system that we are cross-compiling for
 , crossSystem
   # The target that Rust should be configured to use
@@ -39,14 +35,15 @@ let
   crateExpression =
     { lib
     , pkg-config
+    , cmake
     , perl
     , stdenv
     }:
     let
-      holochainCommon = common.holochain { inherit lib craneLib; holochain = inputs.holochain; };
+      bootstrapSrvCommon = common.bootstrapSrv { inherit lib craneLib; kitsune2 = inputs.kitsune2; };
 
       # Crane doesn't know which version to select from a workspace, so we tell it where to look
-      crateInfo = holochainCommon.crateInfo crate;
+      crateInfo = bootstrapSrvCommon.crateInfo;
 
       commonArgs = {
         # Just used for building the workspace, will be replaced when building a specific crate
@@ -54,7 +51,7 @@ let
         version = "0.0.0";
 
         # Load source with a custom filter so we can include non-cargo files that get used during the build
-        src = holochainCommon.src;
+        src = bootstrapSrvCommon.src;
 
         # We don't want to run tests
         doCheck = false;
@@ -71,6 +68,7 @@ let
           pkg-config
           stdenv.cc
           perl
+          cmake
         ];
 
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
@@ -83,7 +81,7 @@ let
         CARGO_PROFILE = "release";
 
         # Tell cargo which target we want to build (so it doesn't default to the build system).
-        cargoExtraArgs = "--target ${rustTargetTriple}";
+        cargoExtraArgs = "--target ${rustTargetTriple} --package kitsune2_bootstrap_srv";
 
         # These environment variables may be necessary if any of your dependencies use a
         # build-script which invokes the `cc` crate to build some other code. The `cc` crate
@@ -101,12 +99,12 @@ let
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
     in
     craneLib.buildPackage (commonArgs // {
-      pname = package;
+      pname = "bootstrap-srv";
       version = crateInfo.version;
 
       inherit cargoArtifacts;
 
-      cargoExtraArgs = "${commonArgs.cargoExtraArgs} --package ${package}";
+      cargoExtraArgs = "${commonArgs.cargoExtraArgs} --package kitsune2_bootstrap_srv";
     });
 in
 # Dispatch the crate expression to run the cross compile

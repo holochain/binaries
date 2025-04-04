@@ -134,7 +134,9 @@
         "holochain": [
           "holochain"
         ],
-        "kitsune2": "kitsune2",
+        "kitsune2": [
+          "kitsune2"
+        ],
         "lair-keystore": [
           "lair-keystore"
         ],
@@ -232,6 +234,7 @@
         "flake-utils": "flake-utils",
         "holochain": "holochain",
         "holonix": "holonix",
+        "kitsune2": "kitsune2",
         "lair-keystore": "lair-keystore",
         "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay"

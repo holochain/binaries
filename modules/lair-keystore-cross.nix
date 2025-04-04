@@ -83,7 +83,7 @@ let
         CARGO_PROFILE = "release";
 
         # Tell cargo which target we want to build (so it doesn't default to the build system).
-        cargoExtraArgs = "--target ${rustTargetTriple}";
+        cargoExtraArgs = "--target ${rustTargetTriple} --package lair_keystore";
 
         # These environment variables may be necessary if any of your dependencies use a
         # build-script which invokes the `cc` crate to build some other code. The `cc` crate

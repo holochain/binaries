@@ -22,13 +22,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    kitsune2 = {
+      url = "github:holochain/kitsune2?ref=v0.1.0";
+      flake = false;
+    };
+
     holochain = {
-      url = "github:holochain/holochain/?ref=holochain-0.5.0-dev.22";
+      url = "github:holochain/holochain?ref=holochain-0.5.0-dev.22";
       flake = false;
     };
 
     lair-keystore = {
-      url = "github:holochain/lair/lair_keystore-v0.6.0";
+      url = "github:holochain/lair?ref=lair_keystore-v0.6.0";
       flake = false;
     };
 
@@ -37,6 +42,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.crane.follows = "crane";
       inputs.rust-overlay.follows = "rust-overlay";
+      inputs.kitsune2.follows = "kitsune2";
       inputs.holochain.follows = "holochain";
       inputs.lair-keystore.follows = "lair-keystore";
     };
@@ -50,6 +56,36 @@
         packages =
           let
             pkgs = nixpkgs.legacyPackages.${localSystem};
+
+            defineBootstrapSrvPackages = {}: {
+              bootstrap_srv_aarch64-linux = import ./modules/bootstrap-srv-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "aarch64-linux";
+                rustTargetTriple = "aarch64-unknown-linux-gnu";
+              };
+              bootstrap_srv_x86_64-linux = import ./modules/bootstrap-srv-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "x86_64-linux";
+                rustTargetTriple = "x86_64-unknown-linux-gnu";
+              };
+              bootstrap_srv_x86_64-windows = import ./modules/bootstrap-srv-windows.nix {
+                inherit localSystem inputs;
+              };
+            } // (if localSystem == "aarch64-darwin" then {
+              # Only define darwin builds if we're on a darwin host because Apple don't like people cross compiling
+              # from other systems.
+              bootstrap_srv_aarch64-apple = import ./modules/bootstrap-srv-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "aarch64-darwin";
+                rustTargetTriple = "aarch64-apple-darwin";
+              };
+            } else if localSystem == "x86_64-darwin" then {
+              bootstrap_srv_x86_64-apple = import ./modules/bootstrap-srv-cross.nix {
+                inherit localSystem inputs;
+                crossSystem = "x86_64-darwin";
+                rustTargetTriple = "x86_64-apple-darwin";
+              };
+            } else { });
 
             defineHolochainPackages = { crate, package }: {
               "${package}_aarch64-linux" = import ./modules/holochain-cross.nix {
@@ -112,6 +148,19 @@
               };
             } else { });
 
+            bootstrapSrvDrv = pkgs.stdenv.mkDerivation {
+              pname = "bootstrap-srv";
+              version = inputs.holonix.packages.${localSystem}.bootstrap-srv.version;
+              meta = {
+                mainProgram = "bootstrap-srv";
+              };
+              unpackPhase = "true";
+              installPhase = ''
+                mkdir -p $out/bin
+                cp ${inputs.holonix.packages.${localSystem}.bootstrap-srv}/bin/kitsune2-bootstrap-srv $out/bin/
+              '';
+            };
+
             extractHolochainBin = bin: pkgs.stdenv.mkDerivation {
               pname = bin;
               version = inputs.holonix.packages.${localSystem}.holochain.version;
@@ -138,14 +187,14 @@
               '';
             };
           in
+          (defineBootstrapSrvPackages { }) //
           (defineHolochainPackages { crate = "holochain"; package = "holochain"; }) //
           (defineHolochainPackages { crate = "hc"; package = "holochain_cli"; }) //
-          (defineHolochainPackages { crate = "hc_run_local_services"; package = "holochain_cli_run_local_services"; }) //
           (defineHolochainPackages { crate = "holochain_terminal"; package = "hcterm"; }) //
           (defineLairKeystorePackages { }) // (if localSystem == "x86_64-linux" then {
+            holonix_bootstrap_srv = bootstrapSrvDrv;
             holonix_holochain = extractHolochainBin "holochain";
             holonix_hc = extractHolochainBin "hc";
-            holonix_hc_run_local_services = extractHolochainBin "hc-run-local-services";
             holonix_hcterm = extractHolochainBin "hcterm";
             holonix_lair_keystore = lairKeystoreDrv;
           } else { })

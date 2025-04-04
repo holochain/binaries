@@ -49,6 +49,18 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      # Bootstrap srv
+      - name: Build the Kitsune2 bootstrap srv for x86_64-unknown-linux-gnu
+        run: |
+          nix build .#bootstrap_srv_x86_64-linux
+          ./result/bin/kitsune2-bootstrap-srv --version
+          nix develop --command ./scripts/export-binary-x86_64-linux.sh kitsune2-bootstrap-srv ./deploy
+
+      - name: Build the Kitsune2 bootstrap srv for aarch64-unknown-linux-gnu
+        run: |
+          nix build .#bootstrap_srv_aarch64-linux
+          cp ./result/bin/kitsune2-bootstrap-srv deploy/kitsune2-bootstrap-srv-aarch64-linux
+
       # Lair Keystore
       - name: Build Lair Keystore for x86_64-unknown-linux-gnu
         run: |
@@ -84,13 +96,6 @@ jobs:
         run: |
           nix build .#holochain_cli_aarch64-linux
           cp ./result/bin/hc deploy/hc-aarch64-linux
-
-      # hc-run-local-services CLI
-      - name: Build the holochain-cli-run-local CLI for x86_64-unknown-linux-gnu
-        run: |
-          nix build .#holochain_cli_run_local_services_x86_64-linux
-          ./result/bin/hc-run-local-services --version
-          nix develop --command ./scripts/export-binary-x86_64-linux.sh hc-run-local-services ./deploy
 
       - name: Build the holochain-cli-run-local CLI for aarch64-unknown-linux-gnu
         run: |
@@ -128,6 +133,11 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Build the Kitsune2 bootstrap srv for x86_64-pc-windows-gnu
+        run: |
+          nix build .#bootstrap_srv_x86_64-windows
+          cp ./result/bin/kitsune2-bootstrap-srv.exe deploy/kitsune2-bootstrap-srv-x86_64-windows.exe
+
       - name: Build Lair Keystore for x86_64-pc-windows-gnu
         run: |
           nix build .#lair_keystore_x86_64-windows
@@ -142,11 +152,6 @@ jobs:
         run: |
           nix build .#holochain_cli_x86_64-windows
           cp ./result/bin/hc.exe deploy/hc-x86_64-windows.exe
-
-      - name: Build the holochain-cli-run-local CLI for x86_64-pc-windows-gnu
-        run: |
-          nix build .#holochain_cli_run_local_services_x86_64-windows
-          cp ./result/bin/hc-run-local-services.exe deploy/hc-run-local-services-x86_64-windows.exe
 
       - name: Build the hcterm CLI for x86_64-pc-windows-gnu
         run: |
@@ -173,6 +178,12 @@ jobs:
         with:
           cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Build the Kitsune2 bootstrap srv for aarch64-apple-darwin
+        run: |
+          nix build .#lair_keystore_aarch64-apple
+          ./result/bin/lair-keystore --version
+          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
+
       - name: Build Lair Keystore for aarch64-apple-darwin
         run: |
           nix build .#lair_keystore_aarch64-apple
@@ -190,12 +201,6 @@ jobs:
           nix build .#holochain_cli_aarch64-apple
           ./result/bin/hc --version
           cp ./result/bin/hc deploy/hc-aarch64-apple
-
-      - name: Build the `holochain-cli-run-local` CLI for aarch64-apple-darwin
-        run: |
-          nix build .#holochain_cli_run_local_services_aarch64-apple
-          ./result/bin/hc-run-local-services --version
-          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-aarch64-apple
 
       - name: Build the `hcterm` CLI for aarch64-apple-darwin
         run: |
