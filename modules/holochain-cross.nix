@@ -75,7 +75,7 @@ let
           perl
           cmake
         ] ++ (pkgs.lib.optionals (crossSystem != "x86_64-darwin") [
-            clang
+          clang
         ]);
 
         # Tell cargo about the linker and an optional emulater. So they can be used in `cargo build`
