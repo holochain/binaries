@@ -43,27 +43,19 @@ let
     # Otherwise the build picks up the host linker instead of the cross linker
     RUSTC_LINKER = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
 
-    CARGO_TARGET_X86_64_PC_WINDOWS_GNU_RUSTFLAGS =
-      "-L native=${pkgs.pkgsCross.mingwW64.windows.pthreads}/lib";
-
-    VERBOSE = "1";
-
     nativeBuildInputs = with pkgs; [
       perl
-      go
       nasm
       cmake
-      pkgsCross.mingwW64.stdenv.cc
-      pkgsCross.mingwW64.windows.pthreads
     ];
 
     depsBuildBuild = with pkgs; [
       pkgsCross.mingwW64.stdenv.cc
-      pkgsCross.mingwW64.windows.pthreads
+      pkgsCross.mingwW64.windows.mingw_w64_pthreads
     ];
 
-    PERL_EXECUTABLE = "${pkgs.perl}/bin/perl";
-    GO_EXECUTABLE = "${pkgs.go}/bin/go";
+    # For AWS LC, otherwise it fails on warnings about its memory operations.
+    CFLAGS="-Wno-stringop-overflow -Wno-array-bounds -Wno-restrict";
   };
 
   # Build *just* the Cargo dependencies (of the entire workspace),
