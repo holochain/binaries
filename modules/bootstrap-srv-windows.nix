@@ -55,7 +55,7 @@ let
     ];
 
     # For AWS LC, otherwise it fails on warnings about its memory operations.
-    CFLAGS="-Wno-stringop-overflow -Wno-array-bounds -Wno-restrict";
+    CFLAGS = "-Wno-stringop-overflow -Wno-array-bounds -Wno-restrict";
   };
 
   # Build *just* the Cargo dependencies (of the entire workspace),
