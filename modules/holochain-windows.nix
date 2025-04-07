@@ -57,8 +57,8 @@ let
     CARGO_BUILD_TARGET = "x86_64-pc-windows-gnu";
     CARGO_PROFILE = "release";
 
-    # fixes issues related to libring
     TARGET_CC = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
+    TARGET_CXX = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}gcc";
 
     # Otherwise tx5-go-pion-sys picks up the host linker instead of the cross linker
     RUSTC_LINKER = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
@@ -69,6 +69,7 @@ let
 
     nativeBuildInputs = with pkgs; [
       perl
+      nasm
       cmake
     ];
 
@@ -76,6 +77,9 @@ let
       pkgsCross.mingwW64.stdenv.cc
       pkgsCross.mingwW64.windows.pthreads
     ];
+
+    # For AWS LC, otherwise it fails on warnings about its memory operations.
+    CFLAGS = "-Wno-stringop-overflow -Wno-array-bounds -Wno-restrict";
   };
 
   # Build *just* the Cargo dependencies (of the entire workspace),
