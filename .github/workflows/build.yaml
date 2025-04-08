@@ -185,6 +185,9 @@ jobs:
       - name: Create deploy dir
         run: mkdir -p deploy
 
+      - name: rust cache
+        uses: Swatinem/rust-cache@v2
+
       - name: Build Holochain and the `hc` CLI
         shell: pwsh
         run: |
