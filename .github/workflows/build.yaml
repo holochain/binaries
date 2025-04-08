@@ -155,10 +155,11 @@ jobs:
 #          nix build -L .#holochain_x86_64-windows
 #          cp ./result/bin/holochain.exe deploy/holochain-x86_64-windows.exe
 
-      - name: Build the `hc` CLI for x86_64-pc-windows-gnu
-        run: |
-          nix build -L .#holochain_cli_x86_64-windows
-          cp ./result/bin/hc.exe deploy/hc-x86_64-windows.exe
+# Currently not able to get libdatachannel to cross-compile for Windows
+#      - name: Build the `hc` CLI for x86_64-pc-windows-gnu
+#        run: |
+#          nix build -L .#holochain_cli_x86_64-windows
+#          cp ./result/bin/hc.exe deploy/hc-x86_64-windows.exe
 
       - name: Build the hcterm CLI for x86_64-pc-windows-gnu
         run: |
@@ -184,7 +185,7 @@ jobs:
       - name: Create deploy dir
         run: mkdir -p deploy
 
-      - name: Build Holochain
+      - name: Build Holochain and the `hc` CLI
         shell: pwsh
         run: |
           $verLine = Get-Content flake.nix | Select-String -Pattern 'holochain\?ref=holochain-(.*)\";$'
@@ -193,6 +194,10 @@ jobs:
           echo "Found ref: $ref"
           
           cargo install --locked holochain@$ref
+          Get-Command holochain | Copy-Item -Destination ./deploy
+          
+          cargo install --locked holochain_cli@$ref
+          Get-Command hc | Copy-Item -Destination ./deploy
 
       - name: Upload artifacts to release
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
