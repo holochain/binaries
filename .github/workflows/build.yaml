@@ -258,57 +258,58 @@ jobs:
         run: |
           gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
 
-  build-from-legacy-apple:
-    runs-on: macos-13
-    needs: [verify-flake]
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
-        with:
-          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
-
-      - name: Create deploy dir
-        run: mkdir -p deploy
-
-      - name: Build the Kitsune2 bootstrap srv for x86_64-apple-darwin
-        run: |
-          nix build -L .#bootstrap_srv_x86_64-apple
-          ./result/bin/kitsune2-bootstrap-srv --version
-          cp ./result/bin/kitsune2-bootstrap-srv deploy/kitsune2-bootstrap-srv-x86_64-apple
-
-      - name: Build Lair Keystore for x86_64-apple-darwin
-        run: |
-          nix build -L .#lair_keystore_x86_64-apple
-          ./result/bin/lair-keystore --version
-          cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-apple
-
-      - name: Build Holochain for x86_64-apple-darwin
-        run: |
-          nix build -L .#holochain_x86_64-apple
-          ./result/bin/holochain --version
-          cp ./result/bin/holochain deploy/holochain-x86_64-apple
-
-      - name: Build the `hc` CLI for x86_64-apple-darwin
-        run: |
-          nix build -L .#holochain_cli_x86_64-apple
-          ./result/bin/hc --version
-          cp ./result/bin/hc deploy/hc-x86_64-apple
-
-      - name: Build the `hcterm` CLI for x86_64-apple-darwin
-        run: |
-          nix build -L .#hcterm_x86_64-apple
-          ./result/bin/hcterm --version
-          cp ./result/bin/hcterm deploy/hcterm-x86_64-apple
-
-      - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
-        env:
-          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
-        run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
+# Currently having issues with conflicting macos SDK versions
+#  build-from-legacy-apple:
+#    runs-on: macos-13
+#    needs: [verify-flake]
+#    permissions:
+#      contents: read
+#      id-token: write
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: ./.github/actions/common-setup
+#        with:
+#          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+#
+#      - name: Create deploy dir
+#        run: mkdir -p deploy
+#
+#      - name: Build the Kitsune2 bootstrap srv for x86_64-apple-darwin
+#        run: |
+#          nix build -L .#bootstrap_srv_x86_64-apple
+#          ./result/bin/kitsune2-bootstrap-srv --version
+#          cp ./result/bin/kitsune2-bootstrap-srv deploy/kitsune2-bootstrap-srv-x86_64-apple
+#
+#      - name: Build Lair Keystore for x86_64-apple-darwin
+#        run: |
+#          nix build -L .#lair_keystore_x86_64-apple
+#          ./result/bin/lair-keystore --version
+#          cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-apple
+#
+#      - name: Build Holochain for x86_64-apple-darwin
+#        run: |
+#          nix build -L .#holochain_x86_64-apple
+#          ./result/bin/holochain --version
+#          cp ./result/bin/holochain deploy/holochain-x86_64-apple
+#
+#      - name: Build the `hc` CLI for x86_64-apple-darwin
+#        run: |
+#          nix build -L .#holochain_cli_x86_64-apple
+#          ./result/bin/hc --version
+#          cp ./result/bin/hc deploy/hc-x86_64-apple
+#
+#      - name: Build the `hcterm` CLI for x86_64-apple-darwin
+#        run: |
+#          nix build -L .#hcterm_x86_64-apple
+#          ./result/bin/hcterm --version
+#          cp ./result/bin/hcterm deploy/hcterm-x86_64-apple
+#
+#      - name: Upload artifacts to release
+#        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+#        env:
+#          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+#        run: |
+#          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
 
   bundle-x86-64-linux:
     runs-on: ubuntu-latest
@@ -363,7 +364,7 @@ jobs:
       - build-from-linux-for-windows
       - build-from-windows
       - build-from-apple
-      - build-from-legacy-apple
+      # - build-from-legacy-apple
       - bundle-x86-64-linux
     steps:
       - name: check status
