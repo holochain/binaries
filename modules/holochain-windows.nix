@@ -48,6 +48,8 @@ let
     pname = "default";
     version = "0.0.0";
 
+    cargoExtraArgs = "--package ${package}";
+
     # Load source with a custom filter so we can include non-cargo files that get used during the build
     src = holochainCommon.src;
 
@@ -60,12 +62,10 @@ let
     TARGET_CC = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
     TARGET_CXX = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}gcc";
 
-    # Otherwise tx5-go-pion-sys picks up the host linker instead of the cross linker
+    # Otherwise, picks up the host linker instead of the cross linker
     RUSTC_LINKER = "${pkgs.pkgsCross.mingwW64.stdenv.cc}/bin/${pkgs.pkgsCross.mingwW64.stdenv.cc.targetPrefix}cc";
 
     SODIUM_LIB_DIR = "${libsodium}/lib";
-
-    LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
 
     nativeBuildInputs = with pkgs; [
       perl
@@ -75,7 +75,7 @@ let
 
     depsBuildBuild = with pkgs; [
       pkgsCross.mingwW64.stdenv.cc
-      pkgsCross.mingwW64.windows.pthreads
+      pkgsCross.mingwW64.windows.mingw_w64_pthreads
     ];
 
     # For AWS LC, otherwise it fails on warnings about its memory operations.
@@ -86,13 +86,17 @@ let
   # so we can reuse all of that work (e.g. via cachix) when running in CI
   # It is *highly* recommended to use something like cargo-hakari to avoid
   # cache misses when building individual top-level-crates
-  cargoArtifacts = craneLib.buildDepsOnly commonArgs;
+  cargoArtifacts = craneLib.buildDepsOnly (commonArgs // {
+    nativeBuildInputs = pkgs.lib.trace (builtins.attrNames pkgs.pkgsCross.mingwW64.clangStdenv) (commonArgs.nativeBuildInputs ++ (with pkgs; [
+      clang
+    ]));
+
+    LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
+  });
 in
 craneLib.buildPackage (commonArgs // {
   pname = package;
   version = crateInfo.version;
 
   inherit cargoArtifacts;
-
-  cargoExtraArgs = "--package ${package}";
 })
