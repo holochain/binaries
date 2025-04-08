@@ -149,10 +149,11 @@ jobs:
           nix build -L .#lair_keystore_x86_64-windows
           cp ./result/bin/lair-keystore.exe deploy/lair-keystore-x86_64-windows.exe
 
-      - name: Build Holochain for x86_64-pc-windows-gnu
-        run: |
-          nix build -L .#holochain_x86_64-windows
-          cp ./result/bin/holochain.exe deploy/holochain-x86_64-windows.exe
+# Currently not able to get libdatachannel to cross-compile for Windows
+#      - name: Build Holochain for x86_64-pc-windows-gnu
+#        run: |
+#          nix build -L .#holochain_x86_64-windows
+#          cp ./result/bin/holochain.exe deploy/holochain-x86_64-windows.exe
 
       - name: Build the `hc` CLI for x86_64-pc-windows-gnu
         run: |
@@ -163,6 +164,35 @@ jobs:
         run: |
           nix build -L .#hcterm_x86_64-windows
           cp ./result/bin/hcterm.exe deploy/hcterm-x86_64-windows.exe
+
+      - name: Upload artifacts to release
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
+
+  build-from-windows:
+    runs-on: windows-latest
+    needs: [verify-flake]
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create deploy dir
+        run: mkdir -p deploy
+
+      - name: Build Holochain
+        shell: pwsh
+        run: |
+          $verLine = Get-Content flake.nix | Select-String -Pattern 'holochain\?ref=holochain-(.*)\";$'
+  
+          $ref = $verLine.Matches.Groups[1]
+          echo "Found ref: $ref"
+          
+          cargo install --locked holochain@$ref
 
       - name: Upload artifacts to release
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
@@ -325,7 +355,8 @@ jobs:
     needs:
       - verify-flake
       - build-from-linux-for-linux
-      # - build-from-linux-for-windows
+      - build-from-linux-for-windows
+      - build-from-windows
       - build-from-apple
       - build-from-legacy-apple
       - bundle-x86-64-linux
