@@ -71,6 +71,7 @@ let
       perl
       nasm
       cmake
+      clang
     ];
 
     depsBuildBuild = with pkgs; [
@@ -78,8 +79,7 @@ let
       pkgsCross.mingwW64.windows.mingw_w64_pthreads
     ];
 
-    # For AWS LC, otherwise it fails on warnings about its memory operations.
-    CFLAGS = "-Wno-stringop-overflow -Wno-array-bounds -Wno-restrict";
+    LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
   };
 
   # Build *just* the Cargo dependencies (of the entire workspace),
