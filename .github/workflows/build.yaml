@@ -1,318 +1,371 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  pull_request: {}
   workflow_dispatch:
     inputs:
-      upload-to-tag:
-          description: 'Upload artifacts to a release, identified by its tag'
-          required: true
-          default: ''
+      publish:
+        description: 'Upload the build artifacts to the release'
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: ${{ github.ref_name }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
-  verify-flake:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
+  build-holochain:
+    strategy:
+      max-parallel: 5
+      fail-fast: false
+      matrix:
+        include:
+          # Holochain with the default backend
+          - os: ubuntu-22.04
+            args: --package holochain
+            cargoBin: holochain
+            bin: holochain
+          - os: ubuntu-22.04-arm
+            args: --package holochain
+            cargoBin: holochain
+            bin: holochain
+          - os: windows-2022
+            args: --package holochain
+            cargoBin: holochain
+            bin: holochain.exe
+          - os: macos-13
+            args: --package holochain
+            cargoBin: holochain
+            bin: holochain
+          - os: macos-latest
+            args: --package holochain
+            cargoBin: holochain
+            bin: holochain
+
+          # Holochain with go-pion
+          - os: ubuntu-22.04
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion
+          - os: ubuntu-22.04-arm
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion
+          - os: windows-2022
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            cargoBin: holochain
+            bin: holochain.exe
+            extraId: -go-pion
+          - os: macos-13
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion
+          - os: macos-latest
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion
+
+          # Holochain CLI
+          - os: ubuntu-22.04
+            args: --package holochain_cli
+            cargoBin: hc
+            bin: hc
+          - os: ubuntu-22.04-arm
+            args: --package holochain_cli
+            cargoBin: hc
+            bin: hc
+          - os: windows-2022
+            args: --package holochain_cli
+            cargoBin: hc
+            bin: hc.exe
+          - os: macos-13
+            args: --package holochain_cli
+            cargoBin: hc
+            bin: hc
+          - os: macos-latest
+            args: --package holochain_cli
+            cargoBin: hc
+            bin: hc
+
+          # Holochain terminal
+          - os: ubuntu-22.04
+            args: --package hcterm
+            cargoBin: hcterm
+            bin: hcterm
+          - os: ubuntu-22.04-arm
+            args: --package hcterm
+            cargoBin: hcterm
+            bin: hcterm
+          - os: windows-2022
+            args: --package hcterm
+            cargoBin: hcterm
+            bin: hcterm.exe
+          - os: macos-13
+            args: --package hcterm
+            cargoBin: hcterm
+            bin: hcterm
+          - os: macos-latest
+            args: --package hcterm
+            cargoBin: hcterm
+            bin: hcterm
+
+    name: Build ${{ matrix.cargoBin }}${{ matrix.extraId }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v6
         with:
-          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
-          maximise-build-space: false
+          go-version: '1.25'
+          cache: 'false'
 
-      - name: Check formatting
-        run: nix fmt . -- --check
+      - name: Get Holochain ref
+        if: ${{ matrix.os != 'windows-2022' }}
+        run: |
+          echo "GIT_REF=$(jq -r .holochain < versions.json)" >> $GITHUB_ENV
 
-      - name: Check Nix flake
-        run: nix flake check --all-systems
+      - name: Get Holochain ref for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
+        run: |
+          echo "GIT_REF=$(Get-Content versions.json | ConvertFrom-Json | Select-Object -ExpandProperty holochain)" >> $env:GITHUB_ENV
 
-  build-from-linux-for-linux:
-    runs-on: ubuntu-latest
-    needs: [verify-flake]
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
+      - name: Get Rust target
+        if: ${{ matrix.os != 'windows-2022' }}
+        run: |
+          echo "RUST_TARGET=$(rustc -vV | sed -n 's|host: ||p')" >> $GITHUB_ENV
+
+      - name: Get Rust target for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
+        run: |
+          echo "RUST_TARGET=$(rustc -vV | Select-String 'host: ' | ForEach-Object { $_.ToString().Replace('host: ', '') })" >> $env:GITHUB_ENV
+
+      - uses: actions/checkout@v5
         with:
-          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          path: holochain
+          repository: 'holochain/holochain'
+          ref: ${{ env.GIT_REF }}
 
-      # Lair Keystore
-      - name: Build Lair Keystore for x86_64-unknown-linux-gnu
-        run: |
-          nix build .#lair_keystore_x86_64-linux
-          ./result/bin/lair-keystore --version
-          nix develop --command ./scripts/export-binary-x86_64-linux.sh lair-keystore ./deploy
+      - uses: Swatinem/rust-cache@v2
 
-      - name: Build Lair Keystore for aarch64-unknown-linux-gnu
+      - name: Build
         run: |
-          nix build .#lair_keystore_aarch64-linux
-          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-linux
+          cd holochain
+          cargo build --release ${{ matrix.args }} --bin ${{ matrix.cargoBin }}
 
-      # Holochain
-      - name: Build Holochain for x86_64-unknown-linux-gnu
+      - name: Copy to deploy
+        if: ${{ matrix.os != 'windows-2022' }}
         run: |
-          nix build .#holochain_x86_64-linux
-          ./result/bin/holochain --version
-          nix develop --command ./scripts/export-binary-x86_64-linux.sh holochain ./deploy
+          mkdir deploy
+          cp holochain/target/release/${{ matrix.bin }} "deploy/${{ matrix.cargoBin }}${{ matrix.extraId }}-${{ env.RUST_TARGET }}"
 
-      - name: Build Holochain for aarch64-unknown-linux-gnu
+      - name: Copy to deploy for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
         run: |
-          nix build .#holochain_aarch64-linux
-          cp ./result/bin/holochain deploy/holochain-aarch64-linux
-
-      # hc CLI
-      - name: Build the `hc` CLI for x86_64-unknown-linux-gnu
-        run: |
-          nix build .#holochain_cli_x86_64-linux
-          ./result/bin/hc --version
-          nix develop --command ./scripts/export-binary-x86_64-linux.sh hc ./deploy
-
-      - name: Build the `hc` CLI for aarch64-unknown-linux-gnu
-        run: |
-          nix build .#holochain_cli_aarch64-linux
-          cp ./result/bin/hc deploy/hc-aarch64-linux
-
-      # hc-run-local-services CLI
-      - name: Build the holochain-cli-run-local CLI for x86_64-unknown-linux-gnu
-        run: |
-          nix build .#holochain_cli_run_local_services_x86_64-linux
-          ./result/bin/hc-run-local-services --version
-          nix develop --command ./scripts/export-binary-x86_64-linux.sh hc-run-local-services ./deploy
-
-      - name: Build the holochain-cli-run-local CLI for aarch64-unknown-linux-gnu
-        run: |
-          nix build .#holochain_cli_run_local_services_aarch64-linux
-          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-aarch64-linux
-
-      # hcterm CLI
-      - name: Build the hcterm CLI for x86_64-unknown-linux-gnu
-        run: |
-          nix build .#hcterm_x86_64-linux
-          ./result/bin/hcterm --version
-          nix develop --command ./scripts/export-binary-x86_64-linux.sh hcterm ./deploy
-
-      - name: Build the hcterm CLI for aarch64-unknown-linux-gnu
-        run: |
-          nix build .#hcterm_aarch64-linux
-          cp ./result/bin/hcterm deploy/hcterm-aarch64-linux
+          New-Item -ItemType Directory -Path deploy
+          Copy-Item -Path "holochain\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}${{ matrix.extraId }}-${{ env.RUST_TARGET }}.exe"
 
       - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
+          gh release upload ${{ env.GIT_REF }} deploy/* --clobber --repo holochain/holochain
 
-  build-from-linux-for-windows:
-    runs-on: ubuntu-latest
-    needs: [verify-flake]
-    permissions:
-      contents: read
-      id-token: write
+  build-bootstrap-srv:
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        include:
+          # Kitsune2 Bootstrap Server
+          - os: ubuntu-22.04
+            args: --package kitsune2_bootstrap_srv
+            cargoBin: kitsune2-bootstrap-srv
+            bin: kitsune2-bootstrap-srv
+          - os: ubuntu-22.04-arm
+            args: --package kitsune2_bootstrap_srv
+            cargoBin: kitsune2-bootstrap-srv
+            bin: kitsune2-bootstrap-srv
+          - os: windows-2022
+            args: --package kitsune2_bootstrap_srv
+            cargoBin: kitsune2-bootstrap-srv
+            bin: kitsune2-bootstrap-srv.exe
+          - os: macos-13
+            args: --package kitsune2_bootstrap_srv
+            cargoBin: kitsune2-bootstrap-srv
+            bin: kitsune2-bootstrap-srv
+          - os: macos-latest
+            args: --package kitsune2_bootstrap_srv
+            cargoBin: kitsune2-bootstrap-srv
+            bin: kitsune2-bootstrap-srv
+
+    name: Build ${{ matrix.cargoBin }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
+      - uses: actions/checkout@v5
+
+      - name: Get Kitsune2 ref
+        if: ${{ matrix.os != 'windows-2022' }}
+        run: |
+          echo "GIT_REF=$(jq -r .kitsune2 < versions.json)" >> $GITHUB_ENV
+          echo "GIT_HOLOCHAIN_REF=$(jq -r .holochain < versions.json)" >> $GITHUB_ENV
+
+      - name: Get Holochain ref for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
+        run: |
+          echo "GIT_REF=$(Get-Content versions.json | ConvertFrom-Json | Select-Object -ExpandProperty kitsune2)" >> $env:GITHUB_ENV
+          echo "GIT_HOLOCHAIN_REF=$(Get-Content versions.json | ConvertFrom-Json | Select-Object -ExpandProperty holochain)" >> $env:GITHUB_ENV
+
+      - name: Get Rust target
+        if: ${{ matrix.os != 'windows-2022' }}
+        run: |
+          echo "RUST_TARGET=$(rustc -vV | sed -n 's|host: ||p')" >> $GITHUB_ENV
+
+      - name: Get Rust target for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
+        run: |
+          echo "RUST_TARGET=$(rustc -vV | Select-String 'host: ' | ForEach-Object { $_.ToString().Replace('host: ', '') })" >> $env:GITHUB_ENV
+
+      - uses: actions/checkout@v5
         with:
-          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          path: kitsune2
+          repository: 'holochain/kitsune2'
+          ref: ${{ env.GIT_REF }}
 
-      - name: Build Lair Keystore for x86_64-pc-windows-gnu
-        run: |
-          nix build .#lair_keystore_x86_64-windows
-          cp ./result/bin/lair-keystore.exe deploy/lair-keystore-x86_64-windows.exe
+      - uses: Swatinem/rust-cache@v2
 
-      - name: Build Holochain for x86_64-pc-windows-gnu
+      - name: Build
         run: |
-          nix build .#holochain_x86_64-windows
-          cp ./result/bin/holochain.exe deploy/holochain-x86_64-windows.exe
+          cd kitsune2
+          cargo build --release ${{ matrix.args }} --bin ${{ matrix.cargoBin }}
 
-      - name: Build the `hc` CLI for x86_64-pc-windows-gnu
+      - name: Copy to deploy
+        if: ${{ matrix.os != 'windows-2022' }}
         run: |
-          nix build .#holochain_cli_x86_64-windows
-          cp ./result/bin/hc.exe deploy/hc-x86_64-windows.exe
+          mkdir deploy
+          cp kitsune2/target/release/${{ matrix.bin }} "deploy/${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}"
 
-      - name: Build the holochain-cli-run-local CLI for x86_64-pc-windows-gnu
+      - name: Copy to deploy for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
         run: |
-          nix build .#holochain_cli_run_local_services_x86_64-windows
-          cp ./result/bin/hc-run-local-services.exe deploy/hc-run-local-services-x86_64-windows.exe
-
-      - name: Build the hcterm CLI for x86_64-pc-windows-gnu
-        run: |
-          nix build .#hcterm_x86_64-windows
-          cp ./result/bin/hcterm.exe deploy/hcterm-x86_64-windows.exe
+          New-Item -ItemType Directory -Path deploy
+          Copy-Item -Path "kitsune2\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}.exe"
 
       - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
+          gh release upload ${{ env.GIT_HOLOCHAIN_REF }} deploy/* --clobber --repo holochain/holochain
 
+  build-lair:
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        include:
+          # Lair Keystore
+          - os: ubuntu-22.04
+            args: --package lair_keystore
+            cargoBin: lair-keystore
+            bin: lair-keystore
+          - os: ubuntu-22.04-arm
+            args: --package lair_keystore
+            cargoBin: lair-keystore
+            bin: lair-keystore
+          - os: windows-2022
+            args: --package lair_keystore
+            cargoBin: lair-keystore
+            bin: lair-keystore.exe
+          - os: macos-13
+            args: --package lair_keystore
+            cargoBin: lair-keystore
+            bin: lair-keystore
+          - os: macos-latest
+            args: --package lair_keystore
+            cargoBin: lair-keystore
+            bin: lair-keystore
 
-  build-from-apple:
-    runs-on: macos-latest
-    needs: [verify-flake]
-    permissions:
-      contents: read
-      id-token: write
+    name: Build ${{ matrix.cargoBin }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
+      - uses: actions/checkout@v5
+
+      - name: Get Lair ref
+        if: ${{ matrix.os != 'windows-2022' }}
+        run: |
+          echo "GIT_REF=$(jq -r .lair < versions.json)" >> $GITHUB_ENV
+          echo "GIT_HOLOCHAIN_REF=$(jq -r .holochain < versions.json)" >> $GITHUB_ENV
+
+      - name: Get Lair ref for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
+        run: |
+          echo "GIT_REF=$(Get-Content versions.json | ConvertFrom-Json | Select-Object -ExpandProperty lair)" >> $env:GITHUB_ENV
+          echo "GIT_HOLOCHAIN_REF=$(Get-Content versions.json | ConvertFrom-Json | Select-Object -ExpandProperty holochain)" >> $env:GITHUB_ENV
+
+      - name: Get Rust target
+        if: ${{ matrix.os != 'windows-2022' }}
+        run: |
+          echo "RUST_TARGET=$(rustc -vV | sed -n 's|host: ||p')" >> $GITHUB_ENV
+
+      - name: Get Rust target for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
+        run: |
+          echo "RUST_TARGET=$(rustc -vV | Select-String 'host: ' | ForEach-Object { $_.ToString().Replace('host: ', '') })" >> $env:GITHUB_ENV
+
+      - uses: actions/checkout@v5
         with:
-          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          path: lair
+          repository: 'holochain/lair'
+          ref: ${{ env.GIT_REF }}
 
-      - name: Build Lair Keystore for aarch64-apple-darwin
-        run: |
-          nix build .#lair_keystore_aarch64-apple
-          ./result/bin/lair-keystore --version
-          cp ./result/bin/lair-keystore deploy/lair-keystore-aarch64-apple
+      - uses: Swatinem/rust-cache@v2
 
-      - name: Build Holochain for aarch64-apple-darwin
+      - name: Build
         run: |
-          nix build .#holochain_aarch64-apple
-          ./result/bin/holochain --version
-          cp ./result/bin/holochain deploy/holochain-aarch64-apple
+          cd lair
+          cargo build --release ${{ matrix.args }} --bin ${{ matrix.cargoBin }}
 
-      - name: Build the `hc` CLI for aarch64-apple-darwin
+      - name: Copy to deploy
+        if: ${{ matrix.os != 'windows-2022' }}
         run: |
-          nix build .#holochain_cli_aarch64-apple
-          ./result/bin/hc --version
-          cp ./result/bin/hc deploy/hc-aarch64-apple
+          mkdir deploy
+          cp lair/target/release/${{ matrix.bin }} "deploy/${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}"
 
-      - name: Build the `holochain-cli-run-local` CLI for aarch64-apple-darwin
+      - name: Copy to deploy for Windows
+        if: ${{ matrix.os == 'windows-2022' }}
+        shell: pwsh
         run: |
-          nix build .#holochain_cli_run_local_services_aarch64-apple
-          ./result/bin/hc-run-local-services --version
-          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-aarch64-apple
-
-      - name: Build the `hcterm` CLI for aarch64-apple-darwin
-        run: |
-          nix build .#hcterm_aarch64-apple
-          ./result/bin/hcterm --version
-          cp ./result/bin/hcterm deploy/hcterm-aarch64-apple
+          New-Item -ItemType Directory -Path deploy
+          Copy-Item -Path "lair\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}.exe"
 
       - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
-
-  build-from-legacy-apple:
-    runs-on: macos-13
-    needs: [verify-flake]
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
-        with:
-          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
-
-      - name: Build Lair Keystore for x86_64-apple-darwin
-        run: |
-          nix build .#lair_keystore_x86_64-apple
-          ./result/bin/lair-keystore --version
-          cp ./result/bin/lair-keystore deploy/lair-keystore-x86_64-apple
-
-      - name: Build Holochain for x86_64-apple-darwin
-        run: |
-          nix build .#holochain_x86_64-apple
-          ./result/bin/holochain --version
-          cp ./result/bin/holochain deploy/holochain-x86_64-apple
-
-      - name: Build the `hc` CLI for x86_64-apple-darwin
-        run: |
-          nix build .#holochain_cli_x86_64-apple
-          ./result/bin/hc --version
-          cp ./result/bin/hc deploy/hc-x86_64-apple
-
-      - name: Build the `holochain-cli-run-local` CLI for x86_64-apple-darwin
-        run: |
-          nix build .#holochain_cli_run_local_services_x86_64-apple
-          ./result/bin/hc-run-local-services --version
-          cp ./result/bin/hc-run-local-services deploy/hc-run-local-services-x86_64-apple
-
-      - name: Build the `hcterm` CLI for x86_64-apple-darwin
-        run: |
-          nix build .#hcterm_x86_64-apple
-          ./result/bin/hcterm --version
-          cp ./result/bin/hcterm deploy/hcterm-x86_64-apple
-
-      - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
-        env:
-          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
-        run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
-
-  bundle-x86-64-linux:
-    runs-on: ubuntu-latest
-    needs: [verify-flake]
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/common-setup
-        with:
-          cachix_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
-
-      - name: Bundle Lair Keystore
-        run: |
-          nix bundle .#holonix_lair_keystore
-          cp ./lair-keystore-arx deploy/lair-keystore-x86-64-linux-bundle
-
-      - name: Bundle Holochain
-        run: |
-          nix bundle .#holonix_holochain
-          cp ./holochain-arx deploy/holochain-x86-64-linux-bundle
-
-      - name: Bundle the `hc` CLI
-        run: |
-          nix bundle .#holonix_hc
-          cp ./hc-arx deploy/hc-x86-64-linux-bundle
-
-      - name: Bundle the `hc-run-local-services` CLI
-        run: |
-          nix bundle .#holonix_hc_run_local_services
-          cp ./hc-run-local-services-arx deploy/hc-run-local-services-x86-64-linux-bundle
-
-      - name: Bundle the `hcterm` CLI
-        run: |
-          nix bundle .#holonix_hcterm
-          cp ./hcterm-arx deploy/hcterm-x86-64-linux-bundle
-
-      - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.upload-to-tag != '' }}
-        env:
-          GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
-        run: |
-          gh release upload ${{ github.event.inputs.upload-to-tag }} deploy/* --clobber --repo holochain/holochain
+          gh release upload ${{ env.GIT_HOLOCHAIN_REF }} deploy/* --clobber --repo holochain/holochain
 
   ci_pass:
     if: ${{ always() }}
     runs-on: "ubuntu-latest"
     needs:
-      - verify-flake
-      - build-from-linux-for-linux
-      - build-from-linux-for-windows
-      - build-from-apple
-      - build-from-legacy-apple
-      - bundle-x86-64-linux
+        - build-holochain
+        - build-bootstrap-srv
+        - build-lair
     steps:
       - name: check status
         uses: re-actors/alls-green@release/v1
