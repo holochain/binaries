@@ -70,6 +70,33 @@ jobs:
             bin: holochain
             extraId: -go-pion
 
+          # Holochain with go-pion and a subset of unstable features
+          - os: ubuntu-22.04
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion-unstable
+          - os: ubuntu-22.04-arm
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion-unstable
+          - os: windows-2022
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            cargoBin: holochain
+            bin: holochain.exe
+            extraId: -go-pion-unstable
+          - os: macos-13
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion-unstable
+          - os: macos-latest
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            cargoBin: holochain
+            bin: holochain
+            extraId: -go-pion-unstable
+
           # Holochain CLI
           - os: ubuntu-22.04
             args: --package holochain_cli

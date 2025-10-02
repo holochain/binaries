@@ -34,6 +34,10 @@ jobs:
         id: holochain-go-pion
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion x86_64-unknown-linux-gnu
+      - name: Check Holochain go-pion unstable
+        id: holochain-go-pion-unstable
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion-unstable x86_64-unknown-linux-gnu
       - name: Check Holochain CLI
         id: holochain-cli
         run: |
@@ -47,6 +51,7 @@ jobs:
       kitsune2-bootstrap-srv: ${{ steps.kitsune2-bootstrap-srv.outputs.kitsune2-bootstrap-srv-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
       holochain-go-pion: ${{ steps.holochain-go-pion.outputs.holochain-go-pion-result }}
+      holochain-go-pion-unstable: ${{ steps.holochain-go-pion-unstable.outputs.holochain-go-pion-unstable-result }}
       holochain-cli: ${{ steps.holochain-cli.outputs.hc-result }}
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
@@ -72,6 +77,10 @@ jobs:
         id: holochain-go-pion
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion x86_64-unknown-linux-gnu
+      - name: Check Holochain go-pion unstable
+        id: holochain-go-pion-unstable
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion-unstable x86_64-unknown-linux-gnu
       - name: Check Holochain CLI
         id: holochain-cli
         run: |
@@ -85,6 +94,7 @@ jobs:
       kitsune2-bootstrap-srv: ${{ steps.kitsune2-bootstrap-srv.outputs.kitsune2-bootstrap-srv-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
       holochain-go-pion: ${{ steps.holochain-go-pion.outputs.holochain-go-pion-result }}
+      holochain-go-pion-unstable: ${{ steps.holochain-go-pion-unstable.outputs.holochain-go-pion-unstable-result }}
       holochain-cli: ${{ steps.holochain-cli.outputs.hc-result }}
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
@@ -110,6 +120,10 @@ jobs:
         id: holochain-go-pion
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion aarch64-unknown-linux-gnu
+      - name: Check Holochain go-pion unstable
+        id: holochain-go-pion-unstable
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion-unstable aarch64-unknown-linux-gnu
       - name: Check Holochain CLI
         id: holochain-cli
         run: |
@@ -123,6 +137,7 @@ jobs:
       kitsune2-bootstrap-srv: ${{ steps.kitsune2-bootstrap-srv.outputs.kitsune2-bootstrap-srv-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
       holochain-go-pion: ${{ steps.holochain-go-pion.outputs.holochain-go-pion-result }}
+      holochain-go-pion-unstable: ${{ steps.holochain-go-pion-unstable.outputs.holochain-go-pion-unstable-result }}
       holochain-cli: ${{ steps.holochain-cli.outputs.hc-result }}
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
@@ -148,6 +163,10 @@ jobs:
         id: holochain-go-pion
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion aarch64-apple-darwin
+      - name: Check Holochain go-pion unstable
+        id: holochain-go-pion-unstable
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion-unstable aarch64-apple-darwin
       - name: Check Holochain CLI
         id: holochain-cli
         run: |
@@ -161,6 +180,7 @@ jobs:
       kitsune2-bootstrap-srv: ${{ steps.kitsune2-bootstrap-srv.outputs.kitsune2-bootstrap-srv-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
       holochain-go-pion: ${{ steps.holochain-go-pion.outputs.holochain-go-pion-result }}
+      holochain-go-pion-unstable: ${{ steps.holochain-go-pion-unstable.outputs.holochain-go-pion-unstable-result }}
       holochain-cli: ${{ steps.holochain-cli.outputs.hc-result }}
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
@@ -186,6 +206,10 @@ jobs:
         id: holochain-go-pion
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion x86_64-apple-darwin
+      - name: Check Holochain go-pion unstable
+        id: holochain-go-pion-unstable
+        run: |
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion-unstable x86_64-apple-darwin
       - name: Check Holochain CLI
         id: holochain-cli
         run: |
@@ -199,6 +223,7 @@ jobs:
       kitsune2-bootstrap-srv: ${{ steps.kitsune2-bootstrap-srv.outputs.kitsune2-bootstrap-srv-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
       holochain-go-pion: ${{ steps.holochain-go-pion.outputs.holochain-go-pion-result }}
+      holochain-go-pion-unstable: ${{ steps.holochain-go-pion-unstable.outputs.holochain-go-pion-unstable-result }}
       holochain-cli: ${{ steps.holochain-cli.outputs.hc-result }}
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
@@ -228,6 +253,11 @@ jobs:
         shell: pwsh
         run: |
           ./scripts/check-bin.ps1 ${{ inputs.check-tag }} holochain-go-pion
+      - name: Check Holochain go-pion unstable
+        id: holochain-go-pion-unstable
+        shell: pwsh
+        run: |
+          ./scripts/check-bin.ps1 ${{ inputs.check-tag }} holochain-go-pion-unstable
       - name: Check Holochain CLI
         id: holochain-cli
         shell: pwsh
@@ -243,6 +273,7 @@ jobs:
       kitsune2-bootstrap-srv: ${{ steps.kitsune2-bootstrap-srv.outputs.kitsune2-bootstrap-srv-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
       holochain-go-pion: ${{ steps.holochain-go-pion.outputs.holochain-go-pion-result }}
+      holochain-go-pion-unstable: ${{ steps.holochain-go-pion-unstable.outputs.holochain-go-pion-unstable-result }}
       holochain-cli: ${{ steps.holochain-cli.outputs.hc-result }}
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
@@ -255,44 +286,50 @@ jobs:
           echo
           echo "Values of 0 are good, otherwise something went wrong"
           echo
-          echo "On ubuntu-24.04     : lair-keystore-x86_64-unknown-linux-gnu           : ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
-          echo "On ubuntu-24.04     : kitsune2-bootstrap-srv-x86_64-unknown-linux-gnu  : ${{ needs.check-ubuntu-24-04.outputs.kitsune2-bootstrap-srv }}"
-          echo "On ubuntu-24.04     : holochain-x86_64-unknown-linux-gnu               : ${{ needs.check-ubuntu-24-04.outputs.holochain }}"
-          echo "On ubuntu-24.04     : holochain-go-pion-x86_64-unknown-linux-gnu       : ${{ needs.check-ubuntu-24-04.outputs.holochain-go-pion }}"
-          echo "On ubuntu-24.04     : hc-x86_64-unknown-linux-gnu                      : ${{ needs.check-ubuntu-24-04.outputs.holochain-cli }}"
-          echo "On ubuntu-24.04     : hcterm-x86_64-unknown-linux-gnu                  : ${{ needs.check-ubuntu-24-04.outputs.hcterm }}"
+          echo "On ubuntu-24.04     : lair-keystore-x86_64-unknown-linux-gnu               : ${{ needs.check-ubuntu-24-04.outputs.lair-keystore }}"
+          echo "On ubuntu-24.04     : kitsune2-bootstrap-srv-x86_64-unknown-linux-gnu      : ${{ needs.check-ubuntu-24-04.outputs.kitsune2-bootstrap-srv }}"
+          echo "On ubuntu-24.04     : holochain-x86_64-unknown-linux-gnu                   : ${{ needs.check-ubuntu-24-04.outputs.holochain }}"
+          echo "On ubuntu-24.04     : holochain-go-pion-x86_64-unknown-linux-gnu           : ${{ needs.check-ubuntu-24-04.outputs.holochain-go-pion }}"
+          echo "On ubuntu-24.04     : holochain-go-pion-unstable-x86_64-unknown-linux-gnu  : ${{ needs.check-ubuntu-24-04.outputs.holochain-go-pion-unstable }}"
+          echo "On ubuntu-24.04     : hc-x86_64-unknown-linux-gnu                          : ${{ needs.check-ubuntu-24-04.outputs.holochain-cli }}"
+          echo "On ubuntu-24.04     : hcterm-x86_64-unknown-linux-gnu                      : ${{ needs.check-ubuntu-24-04.outputs.hcterm }}"
           echo
-          echo "On ubuntu-22.04     : lair-keystore-x86_64-unknown-linux-gnu           : ${{ needs.check-ubuntu-22-04.outputs.lair-keystore }}"
-          echo "On ubuntu-22.04     : kitsune2-bootstrap-srv-x86_64-unknown-linux-gnu  : ${{ needs.check-ubuntu-22-04.outputs.kitsune2-bootstrap-srv }}"
-          echo "On ubuntu-22.04     : holochain-x86_64-unknown-linux-gnu               : ${{ needs.check-ubuntu-22-04.outputs.holochain }}"
-          echo "On ubuntu-22.04     : holochain-go-pion-x86_64-unknown-linux-gnu       : ${{ needs.check-ubuntu-22-04.outputs.holochain-go-pion }}"
-          echo "On ubuntu-22.04     : hc-x86_64-unknown-linux-gnu                      : ${{ needs.check-ubuntu-22-04.outputs.holochain-cli }}"
-          echo "On ubuntu-22.04     : hcterm-x86_64-unknown-linux-gnu                  : ${{ needs.check-ubuntu-22-04.outputs.hcterm }}"
+          echo "On ubuntu-22.04     : lair-keystore-x86_64-unknown-linux-gnu               : ${{ needs.check-ubuntu-22-04.outputs.lair-keystore }}"
+          echo "On ubuntu-22.04     : kitsune2-bootstrap-srv-x86_64-unknown-linux-gnu      : ${{ needs.check-ubuntu-22-04.outputs.kitsune2-bootstrap-srv }}"
+          echo "On ubuntu-22.04     : holochain-x86_64-unknown-linux-gnu                   : ${{ needs.check-ubuntu-22-04.outputs.holochain }}"
+          echo "On ubuntu-22.04     : holochain-go-pion-x86_64-unknown-linux-gnu           : ${{ needs.check-ubuntu-22-04.outputs.holochain-go-pion }}"
+          echo "On ubuntu-22.04     : holochain-go-pion-unstable-x86_64-unknown-linux-gnu  : ${{ needs.check-ubuntu-22-04.outputs.holochain-go-pion-unstable }}"
+          echo "On ubuntu-22.04     : hc-x86_64-unknown-linux-gnu                          : ${{ needs.check-ubuntu-22-04.outputs.holochain-cli }}"
+          echo "On ubuntu-22.04     : hcterm-x86_64-unknown-linux-gnu                      : ${{ needs.check-ubuntu-22-04.outputs.hcterm }}"
           echo
-          echo "On ubuntu-24.04-arm : lair-keystore-aarch64-unknown-linux-gnu          : ${{ needs.check-ubuntu-24-04-arm.outputs.lair-keystore }}"
-          echo "On ubuntu-24.04-arm : kitsune2-bootstrap-srv-aarch64-unknown-linux-gnu : ${{ needs.check-ubuntu-24-04-arm.outputs.kitsune2-bootstrap-srv }}"
-          echo "On ubuntu-24.04-arm : holochain-aarch64-unknown-linux-gnu              : ${{ needs.check-ubuntu-24-04-arm.outputs.holochain }}"
-          echo "On ubuntu-24.04-arm : holochain-go-pion-aarch64-unknown-linux-gnu      : ${{ needs.check-ubuntu-24-04-arm.outputs.holochain-go-pion }}"
-          echo "On ubuntu-24.04-arm : hc-aarch64-unknown-linux-gnu                     : ${{ needs.check-ubuntu-24-04-arm.outputs.holochain-cli }}"
-          echo "On ubuntu-24.04-arm : hcterm-aarch64-unknown-linux-gnu                 : ${{ needs.check-ubuntu-24-04-arm.outputs.hcterm }}"
+          echo "On ubuntu-24.04-arm : lair-keystore-aarch64-unknown-linux-gnu              : ${{ needs.check-ubuntu-24-04-arm.outputs.lair-keystore }}"
+          echo "On ubuntu-24.04-arm : kitsune2-bootstrap-srv-aarch64-unknown-linux-gnu     : ${{ needs.check-ubuntu-24-04-arm.outputs.kitsune2-bootstrap-srv }}"
+          echo "On ubuntu-24.04-arm : holochain-aarch64-unknown-linux-gnu                  : ${{ needs.check-ubuntu-24-04-arm.outputs.holochain }}"
+          echo "On ubuntu-24.04-arm : holochain-go-pion-aarch64-unknown-linux-gnu          : ${{ needs.check-ubuntu-24-04-arm.outputs.holochain-go-pion }}"
+          echo "On ubuntu-24.04-arm : holochain-go-pion-unstable-aarch64-unknown-linux-gnu : ${{ needs.check-ubuntu-24-04-arm.outputs.holochain-go-pion-unstable }}"
+          echo "On ubuntu-24.04-arm : hc-aarch64-unknown-linux-gnu                         : ${{ needs.check-ubuntu-24-04-arm.outputs.holochain-cli }}"
+          echo "On ubuntu-24.04-arm : hcterm-aarch64-unknown-linux-gnu                     : ${{ needs.check-ubuntu-24-04-arm.outputs.hcterm }}"
           echo
-          echo "On macos-arm64      : lair-keystore-aarch64-apple-darwin               : ${{ needs.check-macos-arm64.outputs.lair-keystore }}"
-          echo "On macos-arm64      : kitsune2-bootstrap-srv-aarch64-apple-darwin      : ${{ needs.check-macos-arm64.outputs.kitsune2-bootstrap-srv }}"
-          echo "On macos-arm64      : holochain-aarch64-apple-darwin                   : ${{ needs.check-macos-arm64.outputs.holochain }}"
-          echo "On macos-arm64      : holochain-go-pion-aarch64-apple-darwin           : ${{ needs.check-macos-arm64.outputs.holochain-go-pion }}"
-          echo "On macos-arm64      : hc-aarch64-apple-darwin                          : ${{ needs.check-macos-arm64.outputs.holochain-cli }}"
-          echo "On macos-arm64      : hcterm-aarch64-apple-darwin                      : ${{ needs.check-macos-arm64.outputs.hcterm }}"
+          echo "On macos-arm64      : lair-keystore-aarch64-apple-darwin                   : ${{ needs.check-macos-arm64.outputs.lair-keystore }}"
+          echo "On macos-arm64      : kitsune2-bootstrap-srv-aarch64-apple-darwin          : ${{ needs.check-macos-arm64.outputs.kitsune2-bootstrap-srv }}"
+          echo "On macos-arm64      : holochain-aarch64-apple-darwin                       : ${{ needs.check-macos-arm64.outputs.holochain }}"
+          echo "On macos-arm64      : holochain-go-pion-aarch64-apple-darwin               : ${{ needs.check-macos-arm64.outputs.holochain-go-pion }}"
+          echo "On macos-arm64      : holochain-go-pion-unstable-aarch64-apple-darwin      : ${{ needs.check-macos-arm64.outputs.holochain-go-pion-unstable }}"
+          echo "On macos-arm64      : hc-aarch64-apple-darwin                              : ${{ needs.check-macos-arm64.outputs.holochain-cli }}"
+          echo "On macos-arm64      : hcterm-aarch64-apple-darwin                          : ${{ needs.check-macos-arm64.outputs.hcterm }}"
           echo
-          echo "On macos-intel      : lair-keystore-x86_64-apple-darwin                : ${{ needs.check-macos-intel.outputs.lair-keystore }}"
-          echo "On macos-intel      : kitsune2-bootstrap-srv-x86_64-apple-darwin       : ${{ needs.check-macos-intel.outputs.kitsune2-bootstrap-srv }}"
-          echo "On macos-intel      : holochain-x86_64-apple-darwin                    : ${{ needs.check-macos-intel.outputs.holochain }}"
-          echo "On macos-intel      : holochain-go-pion-x86_64-apple-darwin            : ${{ needs.check-macos-intel.outputs.holochain-go-pion }}"
-          echo "On macos-intel      : hc-x86_64-apple-darwin                           : ${{ needs.check-macos-intel.outputs.holochain-cli }}"
-          echo "On macos-intel      : hcterm-x86_64-apple-darwin                       : ${{ needs.check-macos-intel.outputs.hcterm }}"
+          echo "On macos-intel      : lair-keystore-x86_64-apple-darwin                    : ${{ needs.check-macos-intel.outputs.lair-keystore }}"
+          echo "On macos-intel      : kitsune2-bootstrap-srv-x86_64-apple-darwin           : ${{ needs.check-macos-intel.outputs.kitsune2-bootstrap-srv }}"
+          echo "On macos-intel      : holochain-x86_64-apple-darwin                        : ${{ needs.check-macos-intel.outputs.holochain }}"
+          echo "On macos-intel      : holochain-go-pion-x86_64-apple-darwin                : ${{ needs.check-macos-intel.outputs.holochain-go-pion }}"
+          echo "On macos-intel      : holochain-go-pion-unstable-x86_64-apple-darwin       : ${{ needs.check-macos-intel.outputs.holochain-go-pion-unstable }}"
+          echo "On macos-intel      : hc-x86_64-apple-darwin                               : ${{ needs.check-macos-intel.outputs.holochain-cli }}"
+          echo "On macos-intel      : hcterm-x86_64-apple-darwin                           : ${{ needs.check-macos-intel.outputs.hcterm }}"
           echo
-          echo "On windows          : lair-keystore-x86_64-pc-windows-msvc             : ${{ needs.check-windows.outputs.lair-keystore }}"
-          echo "On windows          : kitsune2-bootstrap-srv-x86_64-pc-windows-msvc    : ${{ needs.check-windows.outputs.kitsune2-bootstrap-srv }}"
-          echo "On windows          : holochain-x86_64-pc-windows-msvc                 : ${{ needs.check-windows.outputs.holochain }}"
-          echo "On windows          : holochain-go-pion-x86_64-pc-windows-msvc         : ${{ needs.check-windows.outputs.holochain-go-pion }}"
-          echo "On windows          : hc-x86_64-pc-windows-msvc                        : ${{ needs.check-windows.outputs.holochain-cli }}"
-          echo "On windows          : hcterm-x86_64-pc-windows-msvc                    : ${{ needs.check-windows.outputs.hcterm }}"
+          echo "On windows          : lair-keystore-x86_64-pc-windows-msvc                 : ${{ needs.check-windows.outputs.lair-keystore }}"
+          echo "On windows          : kitsune2-bootstrap-srv-x86_64-pc-windows-msvc        : ${{ needs.check-windows.outputs.kitsune2-bootstrap-srv }}"
+          echo "On windows          : holochain-x86_64-pc-windows-msvc                     : ${{ needs.check-windows.outputs.holochain }}"
+          echo "On windows          : holochain-go-pion-x86_64-pc-windows-msvc             : ${{ needs.check-windows.outputs.holochain-go-pion }}"
+          echo "On windows          : holochain-go-pion-unstable-x86_64-pc-windows-msvc    : ${{ needs.check-windows.outputs.holochain-go-pion-unstable }}"
+          echo "On windows          : hc-x86_64-pc-windows-msvc                            : ${{ needs.check-windows.outputs.holochain-cli }}"
+          echo "On windows          : hcterm-x86_64-pc-windows-msvc                        : ${{ needs.check-windows.outputs.hcterm }}"
