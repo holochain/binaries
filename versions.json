@@ -1,5 +1,5 @@
 {
-  "holochain": "holochain-0.6.0-dev.28",
-  "kitsune2": "v0.3.0-dev.3",
+  "holochain": "holochain-0.6.0-rc.0",
+  "kitsune2": "v0.3.0",
   "lair":"v0.6.3"
 }
