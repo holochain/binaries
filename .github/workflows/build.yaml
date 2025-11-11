@@ -34,7 +34,7 @@ jobs:
             args: --package holochain
             cargoBin: holochain
             bin: holochain.exe
-          - os: macos-15
+          - os: macos-15-intel
             args: --package holochain
             cargoBin: holochain
             bin: holochain
@@ -59,7 +59,7 @@ jobs:
             cargoBin: holochain
             bin: holochain.exe
             extraId: -go-pion
-          - os: macos-15
+          - os: macos-15-intel
             args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
             cargoBin: holochain
             bin: holochain
@@ -86,7 +86,7 @@ jobs:
             cargoBin: holochain
             bin: holochain.exe
             extraId: -go-pion-unstable
-          - os: macos-15
+          - os: macos-15-intel
             args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
             cargoBin: holochain
             bin: holochain
@@ -110,7 +110,7 @@ jobs:
             args: --package holochain_cli
             cargoBin: hc
             bin: hc.exe
-          - os: macos-15
+          - os: macos-15-intel
             args: --package holochain_cli
             cargoBin: hc
             bin: hc
@@ -132,7 +132,7 @@ jobs:
             args: --package hcterm
             cargoBin: hcterm
             bin: hcterm.exe
-          - os: macos-15
+          - os: macos-15-intel
             args: --package hcterm
             cargoBin: hcterm
             bin: hcterm
@@ -225,7 +225,7 @@ jobs:
             args: --package kitsune2_bootstrap_srv
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv.exe
-          - os: macos-15
+          - os: macos-15-intel
             args: --package kitsune2_bootstrap_srv
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
@@ -315,7 +315,7 @@ jobs:
             args: --package lair_keystore
             cargoBin: lair-keystore
             bin: lair-keystore.exe
-          - os: macos-15
+          - os: macos-15-intel
             args: --package lair_keystore
             cargoBin: lair-keystore
             bin: lair-keystore
