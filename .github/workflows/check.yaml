@@ -142,7 +142,7 @@ jobs:
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
   check-macos-arm64:
-    runs-on: macos-15
+    runs-on: macos-latest
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
