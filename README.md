@@ -20,3 +20,5 @@ branches are for released versions. Doing a bump on any branch follows the same 
 - Create a PR and check that the `build.yaml` workflow passes.
 - Merge the PR and then manually run the `build.yaml` workflow with `publish=true` to publish the binaries.
 - Optionally, run the `check.yaml` workflow against the new release to verify the binaries.
+
+Binaries are published to the corresponding [github release at `holochain/holochain`](https://github.com/holochain/holochain/releases).
