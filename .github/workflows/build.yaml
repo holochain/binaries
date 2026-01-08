@@ -263,27 +263,32 @@ jobs:
 
           # Kitsune2 Bootstrap Server with Iroh relay
           - os: ubuntu-22.04
-            args: --package kitsune2_bootstrap_srv
+            args: --no-default-features --features iroh-relay --package kitsune2_bootstrap_srv
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
+            extraId: -iroh-relay
           - os: ubuntu-22.04-arm
-            args: --package kitsune2_bootstrap_srv
+            args: --no-default-features --features iroh-relay --package kitsune2_bootstrap_srv
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
+            extraId: -iroh-relay
           - os: windows-2022
-            args: --package kitsune2_bootstrap_srv
+            args: --no-default-features --features iroh-relay --package kitsune2_bootstrap_srv
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv.exe
+            extraId: -iroh-relay
           - os: macos-15-intel
-            args: --package kitsune2_bootstrap_srv
+            args: --no-default-features --features iroh-relay --package kitsune2_bootstrap_srv
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
+            extraId: -iroh-relay
           - os: macos-latest
-            args: --package kitsune2_bootstrap_srv
+            args: --no-default-features --features iroh-relay --package kitsune2_bootstrap_srv
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
+            extraId: -iroh-relay
 
-    name: Build ${{ matrix.cargoBin }} on ${{ matrix.os }}
+    name: Build ${{ matrix.cargoBin }}${{ matrix.extraId }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
@@ -329,14 +334,14 @@ jobs:
         if: ${{ matrix.os != 'windows-2022' }}
         run: |
           mkdir deploy
-          cp kitsune2/target/release/${{ matrix.bin }} "deploy/${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}"
+          cp kitsune2/target/release/${{ matrix.bin }} "deploy/${{ matrix.cargoBin }}${{ matrix.extraId }}-${{ env.RUST_TARGET }}"
 
       - name: Copy to deploy for Windows
         if: ${{ matrix.os == 'windows-2022' }}
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path deploy
-          Copy-Item -Path "kitsune2\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}.exe"
+          Copy-Item -Path "kitsune2\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}${{ matrix.extraId }}-${{ env.RUST_TARGET }}.exe"
 
       - name: Upload artifacts to release
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
