@@ -45,57 +45,57 @@ jobs:
 
           # Holochain with go-pion
           - os: ubuntu-22.04
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,transport-tx5-backend-go-pion --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -go-pion
           - os: ubuntu-22.04-arm
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,transport-tx5-backend-go-pion --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -go-pion
           - os: windows-2022
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,transport-tx5-backend-go-pion --package holochain
             cargoBin: holochain
             bin: holochain.exe
             extraId: -go-pion
           - os: macos-15-intel
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,transport-tx5-backend-go-pion --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -go-pion
           - os: macos-latest
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion --package holochain
+            args: --no-default-features --features sqlite-encrypted,wasmer_sys,transport-tx5-backend-go-pion --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -go-pion
 
-          # Holochain with go-pion and a subset of unstable features
+          # Holochain with default backend and a subset of unstable features
           - os: ubuntu-22.04
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            args: --features chc,unstable-functions,unstable-countersigning --package holochain
             cargoBin: holochain
             bin: holochain
-            extraId: -go-pion-unstable
+            extraId: -unstable
           - os: ubuntu-22.04-arm
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            args: --features chc,unstable-functions,unstable-countersigning --package holochain
             cargoBin: holochain
             bin: holochain
-            extraId: -go-pion-unstable
+            extraId: -unstable
           - os: windows-2022
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            args: --features chc,unstable-functions,unstable-countersigning --package holochain
             cargoBin: holochain
             bin: holochain.exe
-            extraId: -go-pion-unstable
+            extraId: -unstable
           - os: macos-15-intel
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            args: --features chc,unstable-functions,unstable-countersigning --package holochain
             cargoBin: holochain
             bin: holochain
-            extraId: -go-pion-unstable
+            extraId: -unstable
           - os: macos-latest
-            args: --no-default-features --features sqlite-encrypted,wasmer_sys,backend-go-pion,chc,unstable-functions,unstable-countersigning --package holochain
+            args: --features chc,unstable-functions,unstable-countersigning --package holochain
             cargoBin: holochain
             bin: holochain
-            extraId: -go-pion-unstable
+            extraId: -unstable
 
           # Holochain CLI
           - os: ubuntu-22.04
