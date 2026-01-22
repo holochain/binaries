@@ -214,23 +214,23 @@ jobs:
         include:
           # Kitsune2 Bootstrap Server
           - os: ubuntu-22.04
-            args: --package kitsune2_bootstrap_srv
+            args: --package kitsune2_bootstrap_srv --no-default-features --features iroh-relay
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
           - os: ubuntu-22.04-arm
-            args: --package kitsune2_bootstrap_srv
+            args: --package kitsune2_bootstrap_srv --no-default-features --features iroh-relay
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
           - os: windows-2022
-            args: --package kitsune2_bootstrap_srv
+            args: --package kitsune2_bootstrap_srv --no-default-features --features iroh-relay
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv.exe
           - os: macos-15-intel
-            args: --package kitsune2_bootstrap_srv
+            args: --package kitsune2_bootstrap_srv --no-default-features --features iroh-relay
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
           - os: macos-latest
-            args: --package kitsune2_bootstrap_srv
+            args: --package kitsune2_bootstrap_srv --no-default-features --features iroh-relay
             cargoBin: kitsune2-bootstrap-srv
             bin: kitsune2-bootstrap-srv
 
