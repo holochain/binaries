@@ -2,13 +2,10 @@ name: Build
 
 on:
   pull_request: {}
-  workflow_dispatch:
-    inputs:
-      publish:
-        description: 'Upload the build artifacts to the release'
-        required: false
-        default: false
-        type: boolean
+  push:
+    branches:
+      - main
+      - main-0.6
 
 concurrency:
   group: ${{ github.ref_name }}-${{ github.event_name }}
@@ -200,7 +197,7 @@ jobs:
           Copy-Item -Path "holochain\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}${{ matrix.extraId }}-${{ env.RUST_TARGET }}.exe"
 
       - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
+        if: ${{ github.event_name == 'push' }}
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
@@ -290,7 +287,7 @@ jobs:
           Copy-Item -Path "kitsune2\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}.exe"
 
       - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
+        if: ${{ github.event_name == 'push' }}
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
@@ -380,7 +377,7 @@ jobs:
           Copy-Item -Path "lair\target\release\${{ matrix.bin }}" -Destination "deploy\${{ matrix.cargoBin }}-${{ env.RUST_TARGET }}.exe"
 
       - name: Upload artifacts to release
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
+        if: ${{ github.event_name == 'push' }}
         env:
           GH_TOKEN: ${{ secrets.HRA_GITHUB_TOKEN }}
         run: |
