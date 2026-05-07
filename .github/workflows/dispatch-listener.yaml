@@ -35,13 +35,3 @@ jobs:
       force: ${{ github.event.inputs.force == 'true' }}
     secrets:
       token: ${{ secrets.HRA_GITHUB_TOKEN }}
-
-  bump-0-5:
-    if: startsWith(github.event.client_payload.tag || github.event.inputs.tag, 'holochain-0.5.')
-    uses: ./.github/workflows/auto-bump.yaml
-    with:
-      tag: ${{ github.event.client_payload.tag || github.event.inputs.tag }}
-      branch: main-0.5
-      force: ${{ github.event.inputs.force == 'true' }}
-    secrets:
-      token: ${{ secrets.HRA_GITHUB_TOKEN }}
