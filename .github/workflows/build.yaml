@@ -6,6 +6,8 @@ on:
     branches:
       - main
       - main-0.6
+    paths:
+      - versions.json
 
 concurrency:
   group: ${{ github.ref_name }}-${{ github.event_name }}
