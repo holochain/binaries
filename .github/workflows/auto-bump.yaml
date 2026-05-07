@@ -37,10 +37,18 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/checkout@v5
+      - name: Check out tooling from main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          path: tooling
+
+      - name: Check out target branch
+        uses: actions/checkout@v6
         with:
           ref: ${{ inputs.branch }}
           token: ${{ secrets.token }}
+          path: target
 
       - name: Install taplo
         env:
@@ -57,6 +65,7 @@ jobs:
           taplo --version
 
       - name: Resolve versions
+        working-directory: target
         env:
           GH_TOKEN: ${{ secrets.token }}
           INPUT_TAG: ${{ inputs.tag }}
@@ -66,10 +75,11 @@ jobs:
           if [ "$INPUT_FORCE" = "true" ]; then
             ARGS+=(--force)
           fi
-          ./scripts/resolve-versions.sh "${ARGS[@]}" "$INPUT_TAG"
+          "$GITHUB_WORKSPACE/tooling/scripts/resolve-versions.sh" "${ARGS[@]}" "$INPUT_TAG"
 
       - name: Detect changes
         id: diff
+        working-directory: target
         run: |
           if git diff --quiet versions.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -81,6 +91,7 @@ jobs:
         if: steps.diff.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
+          path: target
           token: ${{ secrets.token }}
           base: ${{ inputs.branch }}
           branch: auto/bump-${{ inputs.tag }}
@@ -95,5 +106,6 @@ jobs:
             and lair tags were resolved from the `Cargo.lock` at that release
             and verified to exist on their upstream repositories.
 
-            Review the diff in `versions.json` before merging, then run
-            `build.yaml` with `publish=true` to ship the binaries.
+            The bump tooling is maintained on `main` and was checked out from
+            there for this run; only `versions.json` on `${{ inputs.branch }}`
+            is changed.
