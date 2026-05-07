@@ -77,18 +77,7 @@ jobs:
           fi
           "$GITHUB_WORKSPACE/tooling/scripts/resolve-versions.sh" "${ARGS[@]}" "$INPUT_TAG"
 
-      - name: Detect changes
-        id: diff
-        working-directory: target
-        run: |
-          if git diff --quiet versions.json; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Create pull request
-        if: steps.diff.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           path: target
