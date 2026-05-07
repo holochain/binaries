@@ -1,0 +1,47 @@
+name: Dispatch listener
+
+on:
+  repository_dispatch:
+    types: [holochain-released]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Holochain release tag (e.g. holochain-0.7.0-dev.23)'
+        required: true
+        type: string
+      force:
+        description: 'Allow downgrade of versions.json'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  bump-main:
+    if: startsWith(github.event.client_payload.tag || github.event.inputs.tag, 'holochain-0.7.')
+    uses: ./.github/workflows/auto-bump.yaml
+    with:
+      tag: ${{ github.event.client_payload.tag || github.event.inputs.tag }}
+      branch: main
+      force: ${{ github.event.inputs.force == 'true' }}
+    secrets:
+      token: ${{ secrets.HRA_GITHUB_TOKEN }}
+
+  bump-0-6:
+    if: startsWith(github.event.client_payload.tag || github.event.inputs.tag, 'holochain-0.6.')
+    uses: ./.github/workflows/auto-bump.yaml
+    with:
+      tag: ${{ github.event.client_payload.tag || github.event.inputs.tag }}
+      branch: main-0.6
+      force: ${{ github.event.inputs.force == 'true' }}
+    secrets:
+      token: ${{ secrets.HRA_GITHUB_TOKEN }}
+
+  bump-0-5:
+    if: startsWith(github.event.client_payload.tag || github.event.inputs.tag, 'holochain-0.5.')
+    uses: ./.github/workflows/auto-bump.yaml
+    with:
+      tag: ${{ github.event.client_payload.tag || github.event.inputs.tag }}
+      branch: main-0.5
+      force: ${{ github.event.inputs.force == 'true' }}
+    secrets:
+      token: ${{ secrets.HRA_GITHUB_TOKEN }}
