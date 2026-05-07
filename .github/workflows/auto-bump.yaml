@@ -45,11 +45,15 @@ jobs:
       - name: Install taplo
         env:
           TAPLO_VERSION: '0.10.0'
+          TAPLO_SHA256: '8fe196b894ccf9072f98d4e1013a180306e17d244830b03986ee5e8eabeb6156'
         run: |
           curl --fail --silent --show-error --location \
-            "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-x86_64.gz" \
-            | gunzip > /usr/local/bin/taplo
+            --output /tmp/taplo.gz \
+            "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-x86_64.gz"
+          echo "${TAPLO_SHA256}  /tmp/taplo.gz" | sha256sum --check --strict
+          gunzip --stdout /tmp/taplo.gz > /usr/local/bin/taplo
           chmod +x /usr/local/bin/taplo
+          rm /tmp/taplo.gz
           taplo --version
 
       - name: Resolve versions
