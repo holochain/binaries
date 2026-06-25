@@ -34,18 +34,10 @@ jobs:
         id: holochain
         run: |
           ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain x86_64-unknown-linux-gnu
-      - name: Check Holochain go-pion
-        id: holochain-go-pion
+      - name: Check Holochain unstable
+        id: holochain-unstable
         run: |
-          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion x86_64-unknown-linux-gnu
-      - name: Check Holochain go-pion unstable
-        id: holochain-go-pion-unstable
-        run: |
-          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-go-pion-unstable x86_64-unknown-linux-gnu
-      - name: Check Holochain with Iroh
-        id: holochain-iroh
-        run: |
-          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-iroh x86_64-unknown-linux-gnu
+          ./scripts/check-bin.sh ${{ inputs.check-tag }} holochain-unstable x86_64-unknown-linux-gnu
       - name: Check Holochain CLI
         id: holochain-cli
         run: |
@@ -59,9 +51,7 @@ jobs:
       kitsune2-bootstrap-srv: ${{ steps.kitsune2-bootstrap-srv.outputs.kitsune2-bootstrap-srv-result }}
       kitsune2-bootstrap-srv-iroh-relay: ${{ steps.kitsune2-bootstrap-srv-iroh-relay.outputs.kitsune2-bootstrap-srv-iroh-relay-result }}
       holochain: ${{ steps.holochain.outputs.holochain-result }}
-      holochain-go-pion: ${{ steps.holochain-go-pion.outputs.holochain-go-pion-result }}
-      holochain-go-pion-unstable: ${{ steps.holochain-go-pion-unstable.outputs.holochain-go-pion-unstable-result }}
-      holochain-iroh: ${{ steps.holochain-iroh.outputs.holochain-iroh-result }}
+      holochain-unstable: ${{ steps.holochain-unstable.outputs.holochain-unstable-result }}
       holochain-cli: ${{ steps.holochain-cli.outputs.hc-result }}
       hcterm: ${{ steps.hcterm.outputs.hcterm-result }}
 
