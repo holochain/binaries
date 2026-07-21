@@ -45,27 +45,27 @@ jobs:
 
           # Holochain with a subset of unstable features
           - os: ubuntu-22.04
-            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions,unstable-countersigning --package holochain
+            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -unstable
           - os: ubuntu-22.04-arm
-            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions,unstable-countersigning --package holochain
+            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -unstable
           - os: windows-2022
-            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions,unstable-countersigning --package holochain
+            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions --package holochain
             cargoBin: holochain
             bin: holochain.exe
             extraId: -unstable
           - os: macos-15-intel
-            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions,unstable-countersigning --package holochain
+            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -unstable
           - os: macos-latest
-            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions,unstable-countersigning --package holochain
+            args: --no-default-features --features encryption,wasmer-sys-cranelift,unstable-functions --package holochain
             cargoBin: holochain
             bin: holochain
             extraId: -unstable
