@@ -38,13 +38,13 @@ jobs:
           fi
 
       - name: Check out tooling from main
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           path: tooling
 
       - name: Check out target branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.branch }}
           token: ${{ secrets.token }}
@@ -78,7 +78,7 @@ jobs:
           "$GITHUB_WORKSPACE/tooling/scripts/resolve-versions.sh" "${ARGS[@]}" "$INPUT_TAG"
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           path: target
           token: ${{ secrets.token }}
