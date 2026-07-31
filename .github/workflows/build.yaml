@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - main-0.7
       - main-0.6
     paths:
       - .github/workflows/build.yaml
